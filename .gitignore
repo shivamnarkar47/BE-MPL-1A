@@ -1,1 +1,2 @@
-repurpose-hub-backend/env/*
+repurpose-hub-backend/env
+repurpose-hub-backend/__pycache__
