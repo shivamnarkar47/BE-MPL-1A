@@ -11,6 +11,7 @@ import Tutorials from "./components/Tutorials"
 import ProductPage from "./components/ProductPage"
 import Cart from "./components/Cart"
 import Logout from "./components/Logout"
+import AIGenius from "./components/AIGenius"
 
 function App() {
 
@@ -27,6 +28,7 @@ function App() {
             <Route element={<MarketPlace />} path="/home" />
             <Route element={<Donation />} path="/home/donations" />
             <Route element={<Tutorials />} path="/home/tutorials" />
+            <Route element={<AIGenius />} path="/home/genius" />
             <Route element={<ProductPage />} path="/product/:productId/" />
             <Route element={<Cart />} path="/cart" />
           </Route>

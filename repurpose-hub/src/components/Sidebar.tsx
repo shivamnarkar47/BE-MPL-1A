@@ -2,7 +2,7 @@ import { getCookie } from '@/lib/getUser';
 import { useState } from 'react'
 import { Button } from './ui/button';
 import { cn } from '@/lib/utils';
-import { BookX, ChevronLeft, ChevronRight, HandCoins, ShoppingCart, Videotape } from 'lucide-react';
+import { BookX, Brain, ChevronLeft, ChevronRight, HandCoins, ShoppingCart, Videotape } from 'lucide-react';
 import { Link } from 'react-router-dom';
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -64,6 +64,16 @@ const Sidebar = () => {
                       className={`${isSidebarOpen ? "block ml-3" : "hidden"}`}
                     >
                       Cart
+                    </span>
+                  </Link>
+                </li>
+                <li className='my-3'>
+                  <Link to="/home/genius" className="group flex items-center px-3 py-2 text-sm text-gray-500 hover:bg-black hover:text-white rounded-lg">
+                    <Brain />
+                    <span
+                      className={`${isSidebarOpen ? "block ml-3" : "hidden"}`}
+                    >
+                      Genius
                     </span>
                   </Link>
                 </li>

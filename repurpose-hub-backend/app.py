@@ -5,15 +5,12 @@ from bson import ObjectId
 from models import Cart, Checkout, Donation, Login, ProductResponse, User
 from fastapi.middleware.cors import CORSMiddleware
 from passlib.context import CryptContext
+import datetime
 
 app = FastAPI()
 
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:8080",
-    "http://localhost:5173",
+    "*"
 ]
 
 app.add_middleware(
@@ -47,6 +44,9 @@ def cart_helper(cart: dict) -> dict:
     cart["_id"] = str(cart["_id"])  # Convert ObjectId to string
     return cart
 
+def checkout_helper(checkout: dict) -> dict:
+    checkout["_id"] = str(checkout["_id"])  # Convert ObjectId to string
+    return checkout
 
 # Helper function to convert BSON ObjectId to string
 def product_helper(product) -> dict:
@@ -55,7 +55,7 @@ def product_helper(product) -> dict:
         "name": product["name"],
         "price": product["price"],
         "quantity": product["quantity"],
-        "companyname": product["companyname"],
+        "companyname": product["companyName"],
         "imageurl": product["imageurl"],
     }
 
@@ -254,24 +254,29 @@ async def checkout(checkout_info: Checkout):
     if not user_cart:
         raise HTTPException(status_code=404, detail="Cart not found for the user")
 
+    # Save only the list of items rather than entire cart document
+    order_items = user_cart.get("items", [])
+
     # Create an order
     total_price = checkout_info.total_payment
-
-    checkout = {
+    checkout_doc = {
         "user_id": checkout_info.user_id,
-        "items": user_cart,
+        "items": order_items,
         "total_price": total_price,
         "status": "completed",
+        "created_at": datetime.datetime.utcnow(),
+        "updated_at": datetime.datetime.utcnow(),
+        
     }
 
-    checkout_id = await checkout_collection.insert_one(checkout)
+    checkout_id = await checkout_collection.insert_one(checkout_doc)
 
     # Clear the user's cart after checkout
-    cart_collection.delete_one({"user_id": checkout_info.user_id})
+    await cart_collection.delete_one({"user_id": checkout_info.user_id})
 
     return {
         "message": "Transaction successfully",
-        "order_id": str(checkout_id),
+        "order_id": str(checkout_id.inserted_id),
         "total_price": total_price,
     }
 
@@ -286,3 +291,14 @@ async def get_cart(user_id: str):
 
     carts = [cart_helper(cart) for cart in cart_list]
     return carts
+
+# 
+
+@app.get("/orders/{user_id}")
+async def get_orders(user_id: str):
+    checkout_cursor =  checkout_collection.find({"user_id": user_id})
+    checkout_list = await checkout_cursor.to_list(length=None)  # Fetch all donations
+    if not checkout_list:
+        raise HTTPException(status_code=404, detail="Orders not found")
+    checkouts = [checkout_helper(checkout) for checkout in checkout_list]
+    return checkouts

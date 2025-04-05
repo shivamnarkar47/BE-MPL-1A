@@ -45,7 +45,6 @@ class Tutorial(BaseModel):
     title: str
     desc: str
     date_added: str
-    views: str
 
 
 class ClothItem(BaseModel):
@@ -68,3 +67,6 @@ class Cart(BaseModel):
 class Checkout(BaseModel):
     user_id: str
     total_payment: int
+    # Add created_at and updated_at
+    
+    

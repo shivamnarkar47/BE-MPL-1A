@@ -55,13 +55,14 @@ export default function TutorialGrid() {
               <div className="flex justify-between items-center mb-2">
                 <span className="text-sm text-muted-foreground">{tutorial.timing}</span>
                 <span className="text-sm text-muted-foreground">{tutorial.author}</span>
+                
               </div>
               <h2 className="text-xl font-bold mb-2">{tutorial.title}</h2>
               <p className="text-muted-foreground text-sm mb-4">{tutorial.desc}</p>
             </CardContent>
             <CardFooter className="flex justify-between items-center p-4 bg-muted">
               <span className="text-sm text-muted-foreground">{tutorial.date_added}</span>
-              <span className="text-sm text-muted-foreground">{tutorial.views} views</span>
+              {/* <span className="text-sm text-muted-foreground">{tutorial.views} views</span> */}
             </CardFooter>
           </Card>
           </Link>

@@ -29,7 +29,7 @@ export function PaymentDialog({ isOpen, onClose, total }: PaymentDialogProps) {
         endpoint: "cart/checkout",
         data: {
           user_id: user.id,
-          total_payment: total + (total * (20 / 100))
+          total_payment: total
         }
 
       }).then((res) => {
