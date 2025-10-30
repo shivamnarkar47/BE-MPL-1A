@@ -19,9 +19,10 @@ const Register = () => {
       Cookies.set('user', JSON.stringify(res.data), { expires: 3, secure: true, sameSite: 'Strict' });
       navigate("/home")
     }).catch((e) => {
-      console.log(e);
+      console.error(e);
     })
   }
+  
   console.log(errors)
   return (
     <section className="pt-20">

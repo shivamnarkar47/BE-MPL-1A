@@ -9,9 +9,7 @@ import datetime
 
 app = FastAPI()
 
-origins = [
-    "*"
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -44,9 +42,11 @@ def cart_helper(cart: dict) -> dict:
     cart["_id"] = str(cart["_id"])  # Convert ObjectId to string
     return cart
 
+
 def checkout_helper(checkout: dict) -> dict:
     checkout["_id"] = str(checkout["_id"])  # Convert ObjectId to string
     return checkout
+
 
 # Helper function to convert BSON ObjectId to string
 def product_helper(product) -> dict:
@@ -56,7 +56,7 @@ def product_helper(product) -> dict:
         "price": product["price"],
         "quantity": product["quantity"],
         "companyname": product["companyName"],
-        "imageurl": product["imageurl"],
+        "imageurl": product["image_url"],
     }
 
 
@@ -75,7 +75,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 # Helper function to hash passwords
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password)
+    return pwd_context.hash(password[:100])
 
 
 # Helper function to convert BSON ObjectId to string
@@ -266,7 +266,6 @@ async def checkout(checkout_info: Checkout):
         "status": "completed",
         "created_at": datetime.datetime.utcnow(),
         "updated_at": datetime.datetime.utcnow(),
-        
     }
 
     checkout_id = await checkout_collection.insert_one(checkout_doc)
@@ -292,11 +291,13 @@ async def get_cart(user_id: str):
     carts = [cart_helper(cart) for cart in cart_list]
     return carts
 
-# 
+
+#
+
 
 @app.get("/orders/{user_id}")
 async def get_orders(user_id: str):
-    checkout_cursor =  checkout_collection.find({"user_id": user_id})
+    checkout_cursor = checkout_collection.find({"user_id": user_id})
     checkout_list = await checkout_cursor.to_list(length=None)  # Fetch all donations
     if not checkout_list:
         raise HTTPException(status_code=404, detail="Orders not found")

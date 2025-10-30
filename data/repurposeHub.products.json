@@ -1,0 +1,120 @@
+[{
+  "_id": {
+    "$oid": "67f12ab10b738934e4a7e1c0"
+  },
+  "imageurl": "https://www.recharkha.org/cdn/shop/files/Blue_Yellow_Mix_Ikkat_Pattern_Upcycled_Handwoven_Designer_Shopper_Tote_DST0225-007_PS_W.jpg?v=1740400204&width=1100",
+  "name": "Blue Yellow Mix Ikkat Pattern Upcycled Handwoven Designer Shopper Tote (DST0225-007) PS_W",
+  "price": "Rs. 2,550",
+  "companyName": "Recharkha",
+  "quantity": 100
+},
+{
+  "_id": {
+    "$oid": "67f12ab10b738934e4a7e1c1"
+  },
+  "imageurl": "https://www.recharkha.org/cdn/shop/files/Cassette_Tape_Wedge_Upcycled_Handwoven_Designer_Shopper_Tote_DST0225-008_PS_W.jpg?v=1740400315&width=1100",
+  "name": "Cassette Tape Wedge Upcycled Handwoven Designer Shopper Tote (DST0225-008) PS_W",
+  "price": "Rs. 2,550",
+  "companyName": "Recharkha",
+  "quantity": 100
+},
+{
+  "_id": {
+    "$oid": "67f12ab10b738934e4a7e1c2"
+  },
+  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Shopper_Tote_ST0325-002_PS_W.jpg?v=1742644531&width=1100",
+  "name": "Upcycled Handwoven Shopper Tote (ST0325-002) PS_W",
+  "price": "Rs. 1,950",
+  "companyName": "Recharkha",
+  "quantity": 100
+},
+{
+  "_id": {
+    "$oid": "67f12ab10b738934e4a7e1c3"
+  },
+  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Shopper_Tote_ST0325-003_PS_W.jpg?v=1742644614&width=1100",
+  "name": "Upcycled Handwoven Shopper Tote (ST0325-003) PS_W",
+  "price": "Rs. 1,950",
+  "companyName": "Recharkha",
+  "quantity": 100
+},
+{
+  "_id": {
+    "$oid": "67f12ab10b738934e4a7e1c4"
+  },
+  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Shopper_Tote_ST0325-007_PS_W.jpg?v=1742645283&width=1100",
+  "name": "Upcycled Handwoven Shopper Tote (ST0325-007) PS_W",
+  "price": "Rs. 1,950",
+  "companyName": "Recharkha",
+  "quantity": 100
+},
+{
+  "_id": {
+    "$oid": "67f12ab10b738934e4a7e1c5"
+  },
+  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Shopper_Tote_ST0325-009_PS_W.jpg?v=1742645419&width=1100",
+  "name": "Upcycled Handwoven Shopper Tote (ST0325-009) PS_W",
+  "price": "Rs. 1,950",
+  "companyName": "Recharkha",
+  "quantity": 100
+},
+{
+  "_id": {
+    "$oid": "67f12ab10b738934e4a7e1c6"
+  },
+  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Designer_Shopper_Tote_DST0325-002_PS_W.jpg?v=1742647652&width=1100",
+  "name": "Upcycled Handwoven Designer Shopper Tote (DST0325-002) PS_W",
+  "price": "Rs. 2,550",
+  "companyName": "Recharkha",
+  "quantity": 100
+},
+{
+  "_id": {
+    "$oid": "67f12ab10b738934e4a7e1c7"
+  },
+  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Designer_Shopper_Tote_DST0325-003_PS_W.jpg?v=1742647737&width=1100",
+  "name": "Upcycled Handwoven Designer Shopper Tote (DST0325-003) PS_W",
+  "price": "Rs. 2,550",
+  "companyName": "Recharkha",
+  "quantity": 100
+},
+{
+  "_id": {
+    "$oid": "67f12ab10b738934e4a7e1c8"
+  },
+  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Designer_Shopper_Tote_DST0325-004_PS_W.jpg?v=1742647826&width=1100",
+  "name": "Upcycled Handwoven Designer Shopper Tote (DST0325-004) PS_W",
+  "price": "Rs. 2,550",
+  "companyName": "Recharkha",
+  "quantity": 100
+},
+{
+  "_id": {
+    "$oid": "67f12ab10b738934e4a7e1c9"
+  },
+  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Designer_Shopper_Tote_DST0325-005_PS_W.jpg?v=1742647891&width=1100",
+  "name": "Upcycled Handwoven Designer Shopper Tote (DST0325-005) PS_W",
+  "price": "Rs. 2,550",
+  "companyName": "Recharkha",
+  "quantity": 100
+},
+{
+  "_id": {
+    "$oid": "67f12ab10b738934e4a7e1ca"
+  },
+  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Designer_Shopper_Tote_DST0325-006_PS_W.jpg?v=1742648043&width=1100",
+  "name": "Upcycled Handwoven Designer Shopper Tote (DST0325-006) PS_W",
+  "price": "Rs. 2,550",
+  "companyName": "Recharkha",
+  "quantity": 100
+},
+{
+  "_id": {
+    "$oid": "67f12ab10b738934e4a7e1cb"
+  },
+  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Designer_Shopper_Tote_DST0325-007_PS_W.jpg?v=1742648283&width=1100",
+  "name": "Upcycled Handwoven Designer Shopper Tote (DST0325-007) PS_W",
+  "price": "Rs. 2,550",
+  "companyName": "Recharkha",
+  "quantity": 100
+}]
