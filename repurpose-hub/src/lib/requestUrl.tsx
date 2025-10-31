@@ -16,3 +16,5 @@ export const requestUrl = (data:DataProps) => {
 
   })
 }
+
+Add a feature where we can add type of response as optionl
