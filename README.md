@@ -63,7 +63,7 @@ Follow these steps to set up the project:
     cd ..
     ```
 
-3.  **Set up the Go Backend Environment:**
+3.  **Set up the Go Backend Environment:** (Optional)
 
     ```bash
     cd repurpose-hub-backend/GoLang
