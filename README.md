@@ -184,3 +184,46 @@ License is unspecified. All rights reserved by the owner.
 *   [FastAPI](https://fastapi.tiangolo.com/) for building the Python backend.
 *   [Go Fiber](https://github.com/gofiber/fiber) for building the Go backend.
 *   [MongoDB](https://www.mongodb.com/) for the database.
+
+---
+
+## Phase 1 Updates (Frontend Enhancement)
+
+See [docs/PHASE1_UPDATES.md](docs/PHASE1_UPDATES.md) for detailed documentation of Phase 1 enhancements including:
+
+- Enhanced product discovery (search, filters, sorting)
+- Trending products section
+- Wishlist/favorites system
+- Personalized recommendations
+- Guest checkout flow
+- Product reviews & ratings
+- Fixed sidebar layout
+
+## Future Enhancements (Phase 2+)
+
+See [docs/FUTURE_ENHANCEMENTS.md](docs/FUTURE_ENHANCEMENTS.md) for planned features including:
+
+**User Engagement**:
+- User Profiles with order history
+- Eco-Impact Dashboard
+- Social Sharing & Referrals
+
+**Conversion & Trust**:
+- Order Tracking
+- Product Comparison
+- Size Guides & FAQ
+
+**AI/ML Features**:
+- Style Quiz
+- Image Search
+- Price Drop Alerts
+
+**Marketing**:
+- Newsletter System
+- Flash Sales
+- Loyalty Points
+
+**Technical**:
+- Admin Dashboard
+- Analytics & Tracking
+- PWA Features

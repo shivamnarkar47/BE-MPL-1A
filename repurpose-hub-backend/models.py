@@ -1,72 +1,83 @@
-from pydantic import BaseModel, EmailStr, Field
-from typing import List, Literal, Optional
+from pydantic import BaseModel, Field
+from typing import List, Optional
+from datetime import datetime
 
 
+# User Models
 class User(BaseModel):
-    email: EmailStr
-    password: str = Field(
-        ..., min_length=8
-    )  # Enforcing a minimum length of 8 characters
+    email: str
+    password: str
     full_name: Optional[str] = None
-    role: Literal["admin", "user"] = "user"  # Default role is "user"
+    role: str = "user"
 
 
 class Login(BaseModel):
-    email: EmailStr
+    email: str
     password: str
 
 
-class Product(BaseModel):
-    name: str = Field(..., min_length=3, max_length=200)
-    price: str
-    quantity: int
-    companyname: str
-    imageurl: str
-
-class ProductResp(BaseModel):
+# Product Models
+class ProductResponse(BaseModel):
     id: str
-    name: str = Field(..., min_length=3, max_length=200)
+    name: str
     price: str
     quantity: int
     companyname: str
     imageurl: str
 
 
-
-class ProductResponse(Product):
-    id: str  # Field for returning the product ID in response
-
-
-class Tutorial(BaseModel):
-    yt_link: str
-    img_src: str
-    timing: str
-    author: str
-    title: str
-    desc: str
-    date_added: str
-
-
-class ClothItem(BaseModel):
-    id: int
+class CartItem(BaseModel):
+    id: str
     quantity: int
-    clothType: str
+    name: str
+    price: str
+    companyname: str
+    imageurl: str
 
-
-class Donation(BaseModel):
-    id: int
-    items: List[ClothItem]
-    user: str
-    coins: int
 
 class Cart(BaseModel):
     user_id: str
-    items: List[ProductResp]
+    items: List[CartItem]
 
 
+# Checkout Models
 class Checkout(BaseModel):
     user_id: str
-    total_payment: int
-    # Add created_at and updated_at
-    
-    
+    total_payment: float
+
+
+# Donation Models
+class Donation(BaseModel):
+    id: str
+    amount: float
+    donor_name: str
+    message: Optional[str] = None
+    created_at: Optional[datetime] = None
+
+
+# Razorpay Payment Models
+class CreateOrderRequest(BaseModel):
+    amount: float
+    currency: str = "INR"
+    user_id: str
+
+
+class VerifyPaymentRequest(BaseModel):
+    orderId: str
+    razorpayPaymentId: str
+    razorpaySignature: str
+
+
+class OrderResponse(BaseModel):
+    orderId: str
+
+
+class VerifyPaymentResponse(BaseModel):
+    success: bool
+    message: str
+
+
+class CompleteCheckoutRequest(BaseModel):
+    order_id: str
+    razorpay_order_id: str
+    razorpay_payment_id: str

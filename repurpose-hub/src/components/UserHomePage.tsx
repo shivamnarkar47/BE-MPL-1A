@@ -1,14 +1,14 @@
-import { Outlet, Route, Routes } from "react-router-dom"
-import MarketPlace from "./MarketPlace"
+import { Outlet } from "react-router-dom"
 import Sidebar from "./Sidebar"
-import Donation from "./Donation"
 
 const UserHomePage = () => {
 
   return (
-    <div className="flex">
+    <div className="flex max-h-screen">
       <Sidebar />
-      <Outlet/>
+      <main className="flex-1 ml-20  overflow-auto">
+        <Outlet/>
+      </main>
     </div>
   )
 }
