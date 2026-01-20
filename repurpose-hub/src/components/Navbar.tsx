@@ -1,8 +1,11 @@
-import { deleteCookie, getCookie } from '@/lib/getUser';
+import { getCookie } from '@/lib/getUser';
 import { cn } from '@/lib/utils';
 import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import Logo from "@/assets/logo.png"
+import { ShoppingCart, Heart } from 'lucide-react';
+import { useGuestCart } from '@/contexts/GuestCartContext';
+import { useWishlist } from '@/contexts/WishlistContext';
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const user = getCookie();
@@ -78,12 +81,31 @@ const Navbar = () => {
             className={`flex flex-col items-center space-y-8 lg:flex lg:flex-row lg:space-x-3 lg:space-y-0 ${isOpen ? "" : "hidden"}`}
           >
 
-            {
+{
               !user?.id ? (
                 <>
+                  {/* Guest Cart Icon */}
+                  <Link
+                    to="/guest-cart"
+                    className="relative p-2 rounded-lg hover:bg-gray-100"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    <ShoppingCart className="h-6 w-6" />
+                    <GuestCartBadge />
+                  </Link>
+
+                  {/* Wishlist Icon */}
+                  <Link
+                    to="/#wishlist"
+                    className="relative p-2 rounded-lg hover:bg-gray-100"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    <Heart className="h-6 w-6" />
+                    <WishlistBadge />
+                  </Link>
 
                   <Link
-                    className="font-inter rounded-lg bg-black dark:bg-gray-100 dark:text-black px-8 py-4 text-center text-white hover:bg-gray-800"
+                    className="font-inter rounded-lg bg-black dark:bg-gray-100 dark:text-black px-6 py-3 text-center text-white hover:bg-gray-800"
                     onClick={() => {
                       setIsOpen(!isOpen);
                     }}
@@ -93,7 +115,7 @@ const Navbar = () => {
                     Sign Up
                   </Link>
                   <Link
-                    className="font-inter rounded-lg bg-white border dark:bg-gray-100 dark:text-black px-8 py-4 text-center text-black hover:bg-gray-200"
+                    className="font-inter rounded-lg bg-white border dark:bg-gray-100 dark:text-black px-6 py-3 text-center text-black hover:bg-gray-200"
                     onClick={() => {
                       setIsOpen(!isOpen);
                     }}
@@ -160,5 +182,31 @@ const Navbar = () => {
     </section >
   );
 }
+
+// Guest Cart Badge Component
+const GuestCartBadge = () => {
+  const { guestCartCount } = useGuestCart();
+  
+  if (guestCartCount === 0) return null;
+  
+  return (
+    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+      {guestCartCount > 99 ? '99+' : guestCartCount}
+    </span>
+  );
+};
+
+// Wishlist Badge Component
+const WishlistBadge = () => {
+  const { wishlistCount } = useWishlist();
+  
+  if (wishlistCount === 0) return null;
+  
+  return (
+    <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+      {wishlistCount > 99 ? '99+' : wishlistCount}
+    </span>
+  );
+};
 
 export default Navbar

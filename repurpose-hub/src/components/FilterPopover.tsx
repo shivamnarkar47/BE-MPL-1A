@@ -21,9 +21,11 @@ interface Product {
   price: number;
 }
 
+interface FilterPopoverProps {
+  products: Product[];
+}
 
-
-const FilterPopover = ({products}:any) => {
+const FilterPopover = ({ products }: FilterPopoverProps) => {
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [maxPrice, setMaxPrice] = useState<number | null>(null);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>(products);
@@ -32,11 +34,11 @@ const FilterPopover = ({products}:any) => {
     let filtered = products;
 
     if (selectedBrand) {
-      filtered = filtered.filter((product) => product.brand === selectedBrand);
+      filtered = filtered.filter((product: Product) => product.brand === selectedBrand);
     }
 
     if (maxPrice) {
-      filtered = filtered.filter((product) => product.price <= maxPrice);
+      filtered = filtered.filter((product: Product) => product.price <= maxPrice);
     }
 
     setFilteredProducts(filtered);

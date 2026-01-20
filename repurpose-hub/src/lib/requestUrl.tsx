@@ -1,6 +1,10 @@
+<<<<<<< HEAD
 import axios, { AxiosResponse } from "axios"
+=======
+import axios from "axios";
+>>>>>>> fixing-thing
 
-const baseURL = "http://localhost:8000/"
+const baseURL = "http://localhost:8000/";
 
 type DataProps = {
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"
