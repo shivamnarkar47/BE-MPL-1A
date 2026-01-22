@@ -16,7 +16,7 @@ from models import (
     CompleteCheckoutRequest,
 )
 from fastapi.middleware.cors import CORSMiddleware
-from passlib.context import CryptContext
+import bcrypt
 import datetime
 import razorpay
 import os
