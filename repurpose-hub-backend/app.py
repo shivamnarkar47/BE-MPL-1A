@@ -4,7 +4,7 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
 from models import Cart, Checkout, Donation, Login, ProductResponse, User
 from fastapi.middleware.cors import CORSMiddleware
-from passlib.context import CryptContext
+import bcrypt
 import datetime
 
 app = FastAPI()
@@ -65,17 +65,12 @@ def tutorial_helper(tutorial: dict) -> dict:
     return tutorial
 
 
-# Password hashing configuration
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
-
 def verify_password(plain_password: str, hashed_password: str) -> bool:
-    return pwd_context.verify(plain_password, hashed_password)
+    return bcrypt.checkpw(plain_password.encode(), hashed_password.encode())
 
 
-# Helper function to hash passwords
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password[:100])
+    return bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
 
 
 # Helper function to convert BSON ObjectId to string
