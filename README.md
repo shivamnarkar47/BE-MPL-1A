@@ -1,6 +1,6 @@
 # BE-MPL-1A
 
-## Project Overview
+## Project Overview  
 
 This repository contains the codebase for the BE-MPL-1A project. The project encompasses data scraping, backend development, and API creation for managing and displaying repurposed products. It utilizes a variety of technologies, including Python, Go, JavaScript, and TypeScript.
 
