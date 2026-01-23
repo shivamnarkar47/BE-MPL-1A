@@ -3,3 +3,4 @@ repurpose-hub-backend/__pycache__/*
 repurpose-hub-ml/env
 repurpose-hub-ml/__pycache__/*
 repurpose-ml/static/*
+repurpose-ml/__pycache__/*

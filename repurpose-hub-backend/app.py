@@ -22,6 +22,7 @@ import razorpay
 import os
 import hmac
 import hashlib
+from passlib.context import CryptContext
 
 app = FastAPI()
 
@@ -34,7 +35,7 @@ razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 razorpay_client.set_app_details({"title": "FastAPI App", "version": "1.0"})
 
 # CORS configuration
-origins = ["*"]
+origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
 
 app.add_middleware(
     CORSMiddleware,
@@ -46,7 +47,7 @@ app.add_middleware(
 
 # MongoDB connection
 mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
-db = mongo_client.repurposeHub
+db = mongo_client["repurpose-hub"]
 user_collection = db.users
 product_collection = db.products
 tutorials_collection = db.tutorials

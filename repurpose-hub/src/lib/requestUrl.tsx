@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import axios, { AxiosResponse } from "axios"
-=======
-import axios from "axios";
->>>>>>> fixing-thing
 
 const baseURL = "http://localhost:8000/";
 

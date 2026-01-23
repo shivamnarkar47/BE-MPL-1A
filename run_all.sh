@@ -2,15 +2,6 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# Check if we're in the correct environment
-if [[ "$VIRTUAL_ENV" == "" ]]; then
-    echo "Activating virtual environment..."
-    source "$SCRIPT_DIR/.venv/bin/activate" 2>/dev/null || {
-        echo "Warning: No virtual environment found at $SCRIPT_DIR/.venv"
-        echo "Please ensure virtual environments are set up for backend and ML services"
-    }
-fi
-
 echo "Killing existing processes on backend and ML ports..."
 
 # Kill processes on backend port (8000)
@@ -27,6 +18,16 @@ if lsof -Pi :$ML_PORT -sTCP:LISTEN -t >/dev/null 2>&1; then
     kill -9 $(lsof -Pi :$ML_PORT -sTCP:LISTEN -t) 2>/dev/null
 fi
 
+# Ensure MongoDB is running
+if ! pgrep -x "mongod" > /dev/null; then
+    echo "Starting MongoDB..."
+    mkdir -p /tmp/mongodb
+    mongod --dbpath /tmp/mongodb --fork --logpath /tmp/mongodb.log
+    sleep 2
+else
+    echo "MongoDB already running"
+fi
+
 echo "Starting all services..."
 
 # Frontend
@@ -36,12 +37,12 @@ FRONTEND_PID=$!
 
 # Backend
 echo "Starting Backend..."
-cd "$SCRIPT_DIR/repurpose-hub-backend" && source .venv/bin/activate && uvicorn app:app --reload &
+cd "$SCRIPT_DIR/repurpose-hub-backend" && uvicorn app:app --reload &
 BACKEND_PID=$!
 
 # ML Service
 echo "Starting ML Service..."
-cd "$SCRIPT_DIR/repurpose-ml" && source .venv/bin/activate && uvicorn app:app --reload --port 3001 &
+cd "$SCRIPT_DIR/repurpose-ml" && uvicorn app:app --reload --port 3001 &
 ML_PID=$!
 
 echo ""
