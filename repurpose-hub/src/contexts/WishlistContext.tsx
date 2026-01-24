@@ -1,4 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { requestUrl } from '@/lib/requestUrl';
+import { user } from '@/lib/getUser';
 
 interface Product {
   id?: string;
@@ -38,24 +40,87 @@ interface WishlistProviderProps {
 
 export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) => {
   const [wishlist, setWishlist] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-  // Load wishlist from localStorage on mount
+  // Load wishlist from backend when user is logged in, otherwise localStorage
   useEffect(() => {
-    const savedWishlist = localStorage.getItem('wishlist');
-    if (savedWishlist) {
-      try {
-        setWishlist(JSON.parse(savedWishlist));
-      } catch (error) {
-        console.error('Error loading wishlist from localStorage:', error);
-        localStorage.removeItem('wishlist');
+    const loadWishlist = async () => {
+      if (user?.id) {
+        // Load from backend for logged-in users
+        try {
+          setIsLoading(true);
+          const response = await requestUrl({
+            method: 'GET',
+            endpoint: `wishlist/${user.id}`,
+          });
+          
+          if (response.data && response.data.length > 0) {
+            // Flatten items from all wishlist documents
+            const allItems = response.data.flatMap((w: any) => w.items || []);
+            setWishlist(allItems);
+          } else {
+            setWishlist([]);
+          }
+        } catch (error) {
+          console.error('Error loading wishlist from backend:', error);
+          // Fallback to localStorage
+          const savedWishlist = localStorage.getItem('wishlist');
+          if (savedWishlist) {
+            try {
+              setWishlist(JSON.parse(savedWishlist));
+            } catch (e) {
+              console.error('Error parsing localStorage wishlist:', e);
+            }
+          }
+        } finally {
+          setIsLoading(false);
+        }
+      } else {
+        // Load from localStorage for guests
+        const savedWishlist = localStorage.getItem('wishlist');
+        if (savedWishlist) {
+          try {
+            setWishlist(JSON.parse(savedWishlist));
+          } catch (error) {
+            console.error('Error loading wishlist from localStorage:', error);
+            localStorage.removeItem('wishlist');
+          }
+        }
       }
-    }
-  }, []);
+    };
 
-  // Save wishlist to localStorage whenever it changes
+    loadWishlist();
+  }, [user?.id]);
+
+  // Save wishlist to backend when user is logged in, otherwise localStorage
   useEffect(() => {
-    localStorage.setItem('wishlist', JSON.stringify(wishlist));
-  }, [wishlist]);
+    if (user?.id && !isLoading) {
+      // Don't save on initial load to avoid infinite loop
+      const saveToBackend = async () => {
+        try {
+          await requestUrl({
+            method: 'POST',
+            endpoint: 'wishlist/add',
+            data: {
+              user_id: user.id,
+              items: wishlist,
+            },
+          });
+        } catch (error) {
+          console.error('Error saving wishlist to backend:', error);
+          // Fallback to localStorage
+          localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        }
+      };
+      
+      // Debounce save operations
+      const timer = setTimeout(saveToBackend, 500);
+      return () => clearTimeout(timer);
+    } else if (!user?.id) {
+      // Save to localStorage for guests
+      localStorage.setItem('wishlist', JSON.stringify(wishlist));
+    }
+  }, [wishlist, user?.id, isLoading]);
 
   const addToWishlist = (product: Product) => {
     setWishlist(prevWishlist => {
@@ -73,12 +138,30 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
     });
   };
 
-  const removeFromWishlist = (productId: string) => {
+  const removeFromWishlist = async (productId: string) => {
+    // Remove from state immediately for responsive UI
     setWishlist(prevWishlist => 
       prevWishlist.filter(product => 
         (product.id || product._id) !== productId
       )
     );
+
+    // Remove from backend if user is logged in
+    if (user?.id) {
+      try {
+        await requestUrl({
+          method: 'DELETE',
+          endpoint: 'wishlist/remove-item',
+          data: {
+            user_id: user.id,
+            item_id: productId,
+          },
+        });
+      } catch (error) {
+        console.error('Error removing from backend wishlist:', error);
+        // Item already removed from state, so just log error
+      }
+    }
   };
 
   const isInWishlist = (productId: string): boolean => {
@@ -87,8 +170,20 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
     );
   };
 
-  const clearWishlist = () => {
+  const clearWishlist = async () => {
     setWishlist([]);
+
+    // Clear from backend if user is logged in
+    if (user?.id) {
+      try {
+        await requestUrl({
+          method: 'DELETE',
+          endpoint: `wishlist/clear/${user.id}`,
+        });
+      } catch (error) {
+        console.error('Error clearing backend wishlist:', error);
+      }
+    }
   };
 
   const wishlistCount = wishlist.length;

@@ -14,6 +14,8 @@ from models import (
     OrderResponse,
     VerifyPaymentResponse,
     CompleteCheckoutRequest,
+    Wishlist,
+    WishlistItem,
 )
 from fastapi.middleware.cors import CORSMiddleware
 from passlib.context import CryptContext
@@ -55,6 +57,7 @@ donations_collection = db.donations
 cart_collection = db.cart
 checkout_collection = db.checkout
 orders_collection = db.orders  # New collection for Razorpay orders
+wishlist_collection = db.wishlist  # New collection for wishlists
 
 
 # Helper functions
@@ -66,6 +69,11 @@ def donation_helper(donation: dict) -> dict:
 def cart_helper(cart: dict) -> dict:
     cart["_id"] = str(cart["_id"])
     return cart
+
+
+def wishlist_helper(wishlist: dict) -> dict:
+    wishlist["_id"] = str(wishlist["_id"])
+    return wishlist
 
 
 def checkout_helper(checkout: dict) -> dict:
@@ -279,6 +287,94 @@ async def remove_from_cart(request: dict):
         return {"message": "Item removed from cart successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error removing item: {str(e)}")
+
+
+# Wishlist Endpoints
+@app.get("/wishlist/{user_id}")
+async def get_wishlist(user_id: str):
+    try:
+        wishlist_cursor = wishlist_collection.find({"user_id": user_id})
+        wishlist_list = await wishlist_cursor.to_list(length=None)
+
+        if not wishlist_list:
+            return []
+
+        return [wishlist_helper(wishlist) for wishlist in wishlist_list]
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error fetching wishlist: {str(e)}"
+        )
+
+
+@app.post("/wishlist/add")
+async def add_to_wishlist(wishlist: Wishlist):
+    try:
+        existing_wishlist = await wishlist_collection.find_one(
+            {"user_id": wishlist.user_id}
+        )
+
+        if existing_wishlist:
+            # Add new items to existing wishlist
+            for new_item in wishlist.items:
+                item_found = False
+                for existing_item in existing_wishlist["items"]:
+                    if existing_item["id"] == new_item.id:
+                        item_found = True
+                        break
+
+                if not item_found:
+                    await wishlist_collection.update_one(
+                        {"user_id": wishlist.user_id},
+                        {"$push": {"items": new_item.dict()}},
+                    )
+        else:
+            # Create new wishlist
+            new_wishlist = wishlist.dict()
+            await wishlist_collection.insert_one(new_wishlist)
+
+        return {"message": "Items added to wishlist successfully"}
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error adding to wishlist: {str(e)}"
+        )
+
+
+@app.delete("/wishlist/remove-item")
+async def remove_from_wishlist(request: dict):
+    try:
+        user_id = request.get("user_id")
+        item_id = request.get("item_id")
+
+        if not user_id or not item_id:
+            raise HTTPException(
+                status_code=400, detail="user_id and item_id are required"
+            )
+
+        result = await wishlist_collection.update_one(
+            {"user_id": user_id}, {"$pull": {"items": {"id": item_id}}}
+        )
+
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Wishlist not found")
+
+        return {"message": "Item removed from wishlist successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error removing item: {str(e)}")
+
+
+@app.delete("/wishlist/clear/{user_id}")
+async def clear_wishlist(user_id: str):
+    try:
+        result = await wishlist_collection.delete_one({"user_id": user_id})
+
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Wishlist not found")
+
+        return {"message": "Wishlist cleared successfully"}
+    except Exception as e:
+        raise HTTPException(
+            status_code=500, detail=f"Error clearing wishlist: {str(e)}"
+        )
 
 
 # Razorpay Payment Endpoints
