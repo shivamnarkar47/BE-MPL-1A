@@ -16,7 +16,7 @@ from models import (
     CompleteCheckoutRequest,
 )
 from fastapi.middleware.cors import CORSMiddleware
-import bcrypt
+from passlib.context import CryptContext
 import datetime
 import razorpay
 import os
@@ -104,7 +104,7 @@ def order_helper(order) -> dict:
 
 
 # Password hashing configuration
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
@@ -112,7 +112,7 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def hash_password(password: str) -> str:
-    return pwd_context.hash(password[:100])
+    return pwd_context.hash(password)
 
 
 # User Management Endpoints
@@ -245,12 +245,40 @@ async def add_to_cart(cart: Cart):
 
 @app.get("/cart/{user_id}")
 async def get_cart(user_id: str):
-    user_cursor = cart_collection.find({"user_id": user_id})
-    cart_list = await user_cursor.to_list(length=None)
-    if not cart_list:
-        raise HTTPException(status_code=404, detail="Cart not found")
+    try:
+        user_cursor = cart_collection.find({"user_id": user_id})
+        cart_list = await user_cursor.to_list(length=None)
 
-    return [cart_helper(cart) for cart in cart_list]
+        # Return empty cart array instead of 404 when no items found
+        if not cart_list:
+            return []
+
+        return [cart_helper(cart) for cart in cart_list]
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching cart: {str(e)}")
+
+
+@app.delete("/cart/remove-item")
+async def remove_from_cart(request: dict):
+    try:
+        user_id = request.get("user_id")
+        item_id = request.get("item_id")
+
+        if not user_id or not item_id:
+            raise HTTPException(
+                status_code=400, detail="user_id and item_id are required"
+            )
+
+        result = await cart_collection.update_one(
+            {"user_id": user_id}, {"$pull": {"items": {"id": item_id}}}
+        )
+
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Cart not found")
+
+        return {"message": "Item removed from cart successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error removing item: {str(e)}")
 
 
 # Razorpay Payment Endpoints

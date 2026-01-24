@@ -10,6 +10,7 @@ import MarketPlace from "./components/MarketPlace";
 import Tutorials from "./components/Tutorials";
 import ProductPage from "./components/ProductPage";
 import Cart from "./components/Cart";
+import WishlistPage from "./components/WishlistPage";
 import Logout from "./components/Logout";
 import AIGenius from "./components/AIGenius";
 import GuestCheckout from "./components/GuestCheckout";
@@ -41,6 +42,7 @@ function App() {
                 <Route element={<AIGenius />} path="/home/genius" />
                 <Route element={<ProductPage />} path="/product/:productId/" />
                 <Route element={<Cart />} path="/cart" />
+                <Route element={<WishlistPage />} path="/wishlist" />
               </Route>
             </Route>
 

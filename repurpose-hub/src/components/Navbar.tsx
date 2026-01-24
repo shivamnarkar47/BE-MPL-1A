@@ -94,7 +94,7 @@ const Navbar = () => {
                     <GuestCartBadge />
                   </Link>
 
-                  {/* Wishlist Icon */}
+                  {/* Guest Wishlist Icon */}
                   <Link
                     to="/#wishlist"
                     className="relative p-2 rounded-lg hover:bg-gray-100"
@@ -129,16 +129,36 @@ const Navbar = () => {
                 </>
 
               ) : (
-                <button
-                  className="font-inter rounded-lg bg-black dark:bg-gray-100 dark:text-black px-8 py-4 text-center text-white hover:bg-gray-800"
-                  onClick={async () => {
-                   navigate("/logout") 
-                  }}
-                >
-                  Logout
-                </button>
+                <>
+                  {/* User Cart Icon */}
+                  <Link
+                    to="/cart"
+                    className="relative p-2 rounded-lg hover:bg-gray-100"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    <ShoppingCart className="h-6 w-6" />
+                    {/* TODO: Add user cart badge if needed */}
+                  </Link>
 
+                  {/* User Wishlist Icon */}
+                  <Link
+                    to="/wishlist"
+                    className="relative p-2 rounded-lg hover:bg-gray-100"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    <Heart className="h-6 w-6" />
+                    <WishlistBadge />
+                  </Link>
 
+                  <button
+                    className="font-inter rounded-lg bg-black dark:bg-gray-100 dark:text-black px-8 py-4 text-center text-white hover:bg-gray-800"
+                    onClick={async () => {
+                     navigate("/logout") 
+                    }}
+                  >
+                    Logout
+                  </button>
+                </>
               )}
           </div>
           <button

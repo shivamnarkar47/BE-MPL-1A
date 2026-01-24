@@ -40,6 +40,22 @@ class Cart(BaseModel):
     items: List[CartItem]
 
 
+# Wishlist Models
+class WishlistItem(BaseModel):
+    id: str
+    name: str
+    price: str
+    companyname: str
+    imageurl: str
+    rating: Optional[int] = 4
+    stock: Optional[int] = 100
+
+
+class Wishlist(BaseModel):
+    user_id: str
+    items: List[WishlistItem]
+
+
 # Checkout Models
 class Checkout(BaseModel):
     user_id: str

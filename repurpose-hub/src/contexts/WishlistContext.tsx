@@ -9,6 +9,8 @@ interface Product {
   companyName?: string;
   companyname?: string;
   quantity?: number;
+  rating?: number;
+  stock?: number;
 }
 
 interface WishlistContextType {
