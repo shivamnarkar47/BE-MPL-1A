@@ -1,7 +1,7 @@
 import { getCookie } from '@/lib/getUser';
 import { useState } from 'react'
 import { Button } from './ui/button';
-import { BookX, Brain, ChevronLeft, ChevronRight, HandCoins, ShoppingCart, Videotape } from 'lucide-react';
+import { BookX, Brain, ChevronLeft, ChevronRight, HandCoins, ShoppingCart, Videotape, Leaf, Sparkles, User, LayoutDashboard } from 'lucide-react';
 import { Link } from 'react-router-dom';
 const Sidebar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -10,7 +10,7 @@ const Sidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
-return (
+  return (
     <aside className="fixed left-0 top-0 h-screen bg-white flex flex-col border-r z-50 transition-all duration-300">
       <div
         className={`${isSidebarOpen ? "w-80 p-6" : "w-20 px-2 py-6"} bg-white flex flex-col h-full overflow-y-auto`
@@ -74,6 +74,48 @@ return (
                   </span>
                 </Link>
               </li>
+              <li className='my-3'>
+                <Link to="/home/impact" className="group flex items-center px-3 py-2 text-sm text-gray-500 hover:bg-black hover:text-white rounded-lg">
+                  <Leaf className="w-6 h-6" />
+                  <span
+                    className={`${isSidebarOpen ? "block ml-3" : "hidden"}`}
+                  >
+                    Eco Impact
+                  </span>
+                </Link>
+              </li>
+              <li className='my-3'>
+                <Link to="/home/quiz" className="group flex items-center px-3 py-2 text-sm text-gray-500 hover:bg-black hover:text-white rounded-lg">
+                  <Sparkles className="w-6 h-6" />
+                  <span
+                    className={`${isSidebarOpen ? "block ml-3" : "hidden"}`}
+                  >
+                    Style Quiz
+                  </span>
+                </Link>
+              </li>
+              <li className='my-3'>
+                <Link to="/home/profile" className="group flex items-center px-3 py-2 text-sm text-gray-500 hover:bg-black hover:text-white rounded-lg">
+                  <User className="w-6 h-6" />
+                  <span
+                    className={`${isSidebarOpen ? "block ml-3" : "hidden"}`}
+                  >
+                    Profile
+                  </span>
+                </Link>
+              </li>
+              {user?.role === "admin" && (
+                <li className='my-3'>
+                  <Link to="/home/admin" className="group flex items-center px-3 py-2 text-sm text-gray-500 hover:bg-black hover:text-white rounded-lg">
+                    <LayoutDashboard className="w-6 h-6" />
+                    <span
+                      className={`${isSidebarOpen ? "block ml-3" : "hidden"}`}
+                    >
+                      Admin
+                    </span>
+                  </Link>
+                </li>
+              )}
 
             </ul>
 

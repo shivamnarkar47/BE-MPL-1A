@@ -97,3 +97,22 @@ class CompleteCheckoutRequest(BaseModel):
     order_id: str
     razorpay_order_id: str
     razorpay_payment_id: str
+
+
+class EcoImpact(BaseModel):
+    user_id: str
+    co2_saved: float  # in kg
+    water_saved: float  # in liters
+    waste_diverted: float  # in kg
+    trees_saved: float
+    badges: List[str] = []
+    last_updated: datetime = Field(default_factory=datetime.utcnow)
+
+
+class StylePreferences(BaseModel):
+    user_id: str
+    style: str
+    goal: str
+    color: str
+    interest: str
+    updated_at: datetime = Field(default_factory=datetime.utcnow)

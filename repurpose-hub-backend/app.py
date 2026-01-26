@@ -16,6 +16,9 @@ from models import (
     CompleteCheckoutRequest,
     Wishlist,
     WishlistItem,
+    EcoImpact,
+    StylePreferences,
+    ProductCreate,
 )
 from fastapi.middleware.cors import CORSMiddleware
 from passlib.context import CryptContext
@@ -58,6 +61,8 @@ cart_collection = db.cart
 checkout_collection = db.checkout
 orders_collection = db.orders  # New collection for Razorpay orders
 wishlist_collection = db.wishlist  # New collection for wishlists
+eco_impact_collection = db.eco_impact  # New collection for eco-impact metrics
+style_preferences_collection = db.style_preferences  # New collection for style preferences
 
 
 # Helper functions
@@ -109,6 +114,11 @@ def user_helper(user) -> dict:
 def order_helper(order) -> dict:
     order["_id"] = str(order["_id"])
     return order
+
+
+def eco_impact_helper(impact) -> dict:
+    impact["_id"] = str(impact["_id"])
+    return impact
 
 
 # Password hashing configuration
@@ -583,6 +593,30 @@ async def complete_checkout(complete_request: CompleteCheckoutRequest):
         user_id = checkout_order["user_id"]
         await cart_collection.delete_one({"user_id": user_id})
 
+        # Update Eco-Impact
+        # Simple calculation for demonstration: 
+        # CO2: 0.5kg per item, Water: 10L per item, Waste: 0.2kg per item, Trees: 0.01 per item
+        num_items = sum(item.get("quantity", 1) for item in checkout_order.get("items", []))
+        co2_saved = num_items * 0.5
+        water_saved = num_items * 10.0
+        waste_diverted = num_items * 0.2
+        trees_saved = num_items * 0.01
+
+        await eco_impact_collection.update_one(
+            {"user_id": user_id},
+            {
+                "$inc": {
+                    "co2_saved": co2_saved,
+                    "water_saved": water_saved,
+                    "waste_diverted": waste_diverted,
+                    "trees_saved": trees_saved
+                },
+                "$set": {"last_updated": datetime.datetime.utcnow()},
+                "$addToSet": {"badges": "Eco Shopper"}
+            },
+            upsert=True
+        )
+
         return {
             "message": "Checkout completed successfully",
             "order_id": complete_request.order_id,
@@ -618,6 +652,171 @@ async def get_payment_orders(user_id: str):
         raise HTTPException(status_code=404, detail="Payment orders not found")
 
     return [order_helper(order) for order in orders_list]
+
+
+# Eco-Impact Endpoints
+@app.get("/eco-impact/{user_id}", response_model=EcoImpact)
+async def get_eco_impact(user_id: str):
+    """
+    Get eco-impact metrics for a user
+    """
+    impact = await eco_impact_collection.find_one({"user_id": user_id})
+    if not impact:
+        # Initialize impact if not found
+        new_impact = {
+            "user_id": user_id,
+            "co2_saved": 0.0,
+            "water_saved": 0.0,
+            "waste_diverted": 0.0,
+            "trees_saved": 0.0,
+            "badges": [],
+            "last_updated": datetime.datetime.utcnow(),
+        }
+        result = await eco_impact_collection.insert_one(new_impact)
+        impact = await eco_impact_collection.find_one({"_id": result.inserted_id})
+
+    return eco_impact_helper(impact)
+
+
+@app.get("/community-impact")
+async def get_community_impact():
+    """
+    Get aggregate community impact data
+    """
+    pipeline = [
+        {
+            "$group": {
+                "_id": None,
+                "total_co2": {"$sum": "$co2_saved"},
+                "total_water": {"$sum": "$water_saved"},
+                "total_waste": {"$sum": "$waste_diverted"},
+                "total_trees": {"$sum": "$trees_saved"},
+                "total_users": {"$sum": 1},
+            }
+        }
+    ]
+    cursor = eco_impact_collection.aggregate(pipeline)
+    result = await cursor.to_list(length=1)
+
+    if not result:
+        return {
+            "total_co2": 0.0,
+            "total_water": 0.0,
+            "total_waste": 0.0,
+            "total_trees": 0.0,
+            "total_users": 0,
+        }
+
+    return result[0]
+
+
+# Style Quiz Endpoints
+@app.post("/style-quiz")
+async def save_style_preferences(prefs: StylePreferences):
+    """
+    Save user style preferences from the quiz
+    """
+    try:
+        await style_preferences_collection.update_one(
+            {"user_id": prefs.user_id},
+            {"$set": prefs.dict()},
+            upsert=True
+        )
+        return {"message": "Style preferences saved successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error saving preferences: {str(e)}")
+
+
+@app.get("/style-quiz/{user_id}")
+async def get_style_preferences(user_id: str):
+    """
+    Get user style preferences
+    """
+    prefs = await style_preferences_collection.find_one({"user_id": user_id})
+    if not prefs:
+        raise HTTPException(status_code=404, detail="Preferences not found")
+    
+    prefs["_id"] = str(prefs["_id"])
+    return prefs
+
+
+# Admin Endpoints
+@app.post("/admin/products")
+async def admin_create_product(product: ProductCreate):
+    """
+    Create a new product (Admin only)
+    """
+    try:
+        product_data = product.dict()
+        result = await product_collection.insert_one(product_data)
+        return {"message": "Product created successfully", "id": str(result.inserted_id)}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error creating product: {str(e)}")
+
+
+@app.put("/admin/products/{product_id}")
+async def admin_update_product(product_id: str, product: ProductCreate):
+    """
+    Update an existing product (Admin only)
+    """
+    if not ObjectId.is_valid(product_id):
+        raise HTTPException(status_code=400, detail="Invalid product ID")
+    
+    try:
+        result = await product_collection.update_one(
+            {"_id": ObjectId(product_id)},
+            {"$set": product.dict()}
+        )
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Product not found")
+        return {"message": "Product updated successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating product: {str(e)}")
+
+
+@app.delete("/admin/products/{product_id}")
+async def admin_delete_product(product_id: str):
+    """
+    Delete a product (Admin only)
+    """
+    if not ObjectId.is_valid(product_id):
+        raise HTTPException(status_code=400, detail="Invalid product ID")
+    
+    try:
+        result = await product_collection.delete_one({"_id": ObjectId(product_id)})
+        if result.deleted_count == 0:
+            raise HTTPException(status_code=404, detail="Product not found")
+        return {"message": "Product deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error deleting product: {str(e)}")
+
+
+@app.get("/admin/analytics")
+async def get_admin_analytics():
+    """
+    Get platform analytics (Admin only)
+    """
+    try:
+        total_products = await product_collection.count_documents({})
+        total_users = await user_collection.count_documents({})
+        total_orders = await checkout_collection.count_documents({"status": "completed"})
+        
+        # Calculate total revenue
+        pipeline = [
+            {"$match": {"status": "completed"}},
+            {"$group": {"_id": None, "total_revenue": {"$sum": "$total_price"}}}
+        ]
+        revenue_result = await checkout_collection.aggregate(pipeline).to_list(length=1)
+        total_revenue = revenue_result[0]["total_revenue"] if revenue_result else 0
+        
+        return {
+            "total_products": total_products,
+            "total_users": total_users,
+            "total_orders": total_orders,
+            "total_revenue": total_revenue
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error fetching analytics: {str(e)}")
 
 
 # Health check endpoint

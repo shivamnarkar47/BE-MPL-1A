@@ -16,6 +16,10 @@ import AIGenius from "./components/AIGenius";
 import GuestCheckout from "./components/GuestCheckout";
 import GuestCart from "./components/GuestCart";
 import OrderConfirmation from "./components/OrderConfirmation";
+import EcoDashboard from "./components/EcoDashboard";
+import StyleQuiz from "./components/StyleQuiz";
+import Profile from "./components/Profile";
+import AdminDashboard from "./components/AdminDashboard";
 import { WishlistProvider } from "./contexts/WishlistContext";
 import { GuestCartProvider } from "./contexts/GuestCartContext";
 import { ReviewProvider } from "./contexts/ReviewContext";
@@ -43,6 +47,10 @@ function App() {
                 <Route element={<ProductPage />} path="/product/:productId/" />
                 <Route element={<Cart />} path="/cart" />
                 <Route element={<WishlistPage />} path="/wishlist" />
+                <Route element={<EcoDashboard />} path="/home/impact" />
+                <Route element={<StyleQuiz />} path="/home/quiz" />
+                <Route element={<Profile />} path="/home/profile" />
+                <Route element={<AdminDashboard />} path="/home/admin" />
               </Route>
             </Route>
 
