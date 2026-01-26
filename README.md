@@ -42,6 +42,7 @@ Before setting up the project, ensure you have the following installed:
 
 ## Installation & Setup Instructions
 
+
 Follow these steps to set up the project:
 
 1.  **Clone the Repository:**
@@ -50,6 +51,7 @@ Follow these steps to set up the project:
     git clone https://github.com/shivamnarkar47/BE-MPL-1A/
     cd BE-MPL-1A
     ```
+
 
 2.  **Set up the Python Data Scraper Environment:**
 
@@ -63,7 +65,31 @@ Follow these steps to set up the project:
     cd ..
     ```
 
-3.  **Set up the Go Backend Environment:** (Optional)
+
+3.  **Set up the Python Backend Environment:**
+
+    ```bash
+    cd repurpose-hub-backend
+    python3 -m venv venv
+    source venv/bin/activate  # On Linux/macOS
+    # venv\Scripts\activate  # On Windows
+    pip install -r requirements.txt # if you have a requirements.txt, otherwise install the packages manually
+    pip install fastapi uvicorn motor passlib python-dotenv
+    cd ..
+    ```
+
+4.  **Set up the ML Folder Environment:**
+
+    ```bash
+    cd repurpose-ml
+    python3 -m venv venv
+    source venv/bin/activate  # On Linux/macOS
+    # venv\Scripts\activate  # On Windows
+    pip install -r requirements.txt # if you have a requirements.txt, otherwise install the packages manually
+    cd ..
+    ```
+
+5.  **Set up the Go Backend Environment:** (Optional)
 
     ```bash
     cd repurpose-hub-backend/GoLang
@@ -71,20 +97,7 @@ Follow these steps to set up the project:
     cd ../../..
     ```
 
-4.  **Set up the Python Backend Environment:**
-
-    ```bash
-    cd repurpose-hub-backend
-    python3 -m venv venv
-    source venv/bin/activate  # On Linux/macOS
-    # venv\Scripts\activate  # On Windows
-    pip install -r requirements.txt #if you have a requirements.txt, otherwise install the packages manually
-    pip install fastapi uvicorn motor passlib python-dotenv
-    cd ..
-
-    ```
-
-5.  **Configure Environment Variables (Go Backend):**
+6.  **Configure Environment Variables (Go Backend):**
 
     *   Create a `.env` file in the `repurpose-hub-backend/GoLang/configs/` directory (if not already present).
     *   Define the necessary environment variables, such as database connection strings, API keys, or other configuration settings. Example:
@@ -95,7 +108,7 @@ Follow these steps to set up the project:
         DATABASE_NAME=repurpose_hub
         ```
 
-6. **Install Node.js Dependencies (If applicable):**
+7. **Install Node.js Dependencies (If applicable):**
 
     If there's a frontend component using Node.js, navigate to the frontend directory and run:
 
