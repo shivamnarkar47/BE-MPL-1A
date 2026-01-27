@@ -13,7 +13,7 @@ if ! pgrep -x "mongod" > /dev/null; then
 fi
 
 # Define file paths
-PRODUCTS_FILE="/home/vagabond/Documents/Clg/Sem 8/BE-MPL-2A/data/repurposeHub.products.json"
+PRODUCTS_FILE="/home/vagabond/Documents/Clg/Sem 8/BE-MPL-2A/data-scraper/recharkha_products-2.json"
 TUTORIALS_FILE="/home/vagabond/Documents/Clg/Sem 8/BE-MPL-2A/data/repurposeHub.tutorials.json"
 
 # Check if data files exist
@@ -28,7 +28,7 @@ if [[ ! -f "$TUTORIALS_FILE" ]]; then
 fi
 
 echo "Importing products data..."
-mongoimport --db repurposeHub --collection products --file "$PRODUCTS_FILE" --jsonArray
+mongoimport --db repurpose-hub --collection products --file "$PRODUCTS_FILE" --jsonArray
 
 if [[ $? -eq 0 ]]; then
     echo "✓ Products imported successfully"
@@ -38,7 +38,7 @@ else
 fi
 
 echo "Importing tutorials data..."
-mongoimport --db repurposeHub --collection tutorials --file "$TUTORIALS_FILE" --jsonArray
+mongoimport --db repurpose-hub --collection tutorials --file "$TUTORIALS_FILE" --jsonArray
 
 if [[ $? -eq 0 ]]; then
     echo "✓ Tutorials imported successfully"
@@ -48,12 +48,12 @@ else
 fi
 
 echo "MongoDB import completed successfully!"
-echo "Database: repurposeHub"
+echo "Database: repurpose-hub"
 echo "Collections: products, tutorials"
 
 # Verify import
 echo "Verifying import..."
-echo "Products count: $(mongo --quiet repurposeHub --eval "db.products.countDocuments()" 2>/dev/null || echo "N/A")"
-echo "Tutorials count: $(mongo --quiet repurposeHub --eval "db.tutorials.countDocuments()" 2>/dev/null || echo "N/A")"
+echo "Products count: $(mongo --quiet repurpose-hub --eval "db.products.countDocuments()" 2>/dev/null || echo "N/A")"
+echo "Tutorials count: $(mongo --quiet repurpose-hub --eval "db.tutorials.countDocuments()" 2>/dev/null || echo "N/A")"
 
 echo "Done!"
