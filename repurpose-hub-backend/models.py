@@ -26,6 +26,14 @@ class ProductResponse(BaseModel):
     imageurl: str
 
 
+class ProductCreate(BaseModel):
+    name: str
+    price: str
+    quantity: int
+    companyName: str
+    image_url: str
+
+
 class CartItem(BaseModel):
     id: str
     quantity: int
