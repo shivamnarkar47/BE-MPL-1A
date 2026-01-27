@@ -84,7 +84,7 @@ headers = {
     "Upgrade-Insecure-Requests": "1",
 }
 
-url = "https://www.recharkha.org/collections/taco-sling"
+url = "https://www.recharkha.org/collections/basketry-deco-storage-small"
 
 # Send a GET request to the website
 response = requests.get(url, headers=headers, timeout=10)

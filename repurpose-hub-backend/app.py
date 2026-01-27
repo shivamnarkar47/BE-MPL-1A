@@ -299,6 +299,37 @@ async def remove_from_cart(request: dict):
         raise HTTPException(status_code=500, detail=f"Error removing item: {str(e)}")
 
 
+@app.patch("/cart/update-quantity")
+async def update_cart_quantity(request: dict):
+    try:
+        user_id = request.get("user_id")
+        item_id = request.get("item_id")
+        quantity = request.get("quantity")
+
+        if user_id is None or item_id is None or quantity is None:
+            raise HTTPException(status_code=400, detail="user_id, item_id, and quantity are required")
+
+        if quantity <= 0:
+            # Remove item if quantity is 0 or less
+            result = await cart_collection.update_one(
+                {"user_id": user_id},
+                {"$pull": {"items": {"id": item_id}}}
+            )
+        else:
+            # Update to absolute quantity
+            result = await cart_collection.update_one(
+                {"user_id": user_id, "items.id": item_id},
+                {"$set": {"items.$.quantity": quantity}}
+            )
+
+        if result.matched_count == 0:
+            raise HTTPException(status_code=404, detail="Cart or item not found")
+
+        return {"message": "Quantity updated successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error updating quantity: {str(e)}")
+
+
 # Wishlist Endpoints
 @app.get("/wishlist/{user_id}")
 async def get_wishlist(user_id: str):

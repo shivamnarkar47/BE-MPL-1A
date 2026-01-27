@@ -71,11 +71,18 @@ class Checkout(BaseModel):
 
 
 # Donation Models
+class ClothItem(BaseModel):
+    id: int
+    quantity: int
+    clothType: str
+
+
 class Donation(BaseModel):
     id: str
-    amount: float
-    donor_name: str
-    message: Optional[str] = None
+    items: List[ClothItem]
+    user: str
+    coins: int
+    status: Optional[str] = "Processing"
     created_at: Optional[datetime] = None
 
 

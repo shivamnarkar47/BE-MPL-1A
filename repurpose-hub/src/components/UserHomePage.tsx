@@ -4,10 +4,10 @@ import Sidebar from "./Sidebar"
 const UserHomePage = () => {
 
   return (
-    <div className="flex max-h-screen">
+    <div className="flex bg-slate-50 min-h-screen overflow-x-hidden w-full">
       <Sidebar />
-      <main className="flex-1 ml-20  overflow-auto">
-        <Outlet/>
+      <main className="flex-1 ml-20 overflow-x-hidden">
+        <Outlet />
       </main>
     </div>
   )

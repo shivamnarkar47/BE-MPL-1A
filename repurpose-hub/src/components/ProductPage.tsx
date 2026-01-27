@@ -23,40 +23,68 @@ export default function ProductPage() {
   const user = getCookie();
   const navigate = useNavigate();
   const [product, setProduct] = useState<ProductType | null>(null);
+  const [cartQuantity, setCartQuantity] = useState<number>(0);
   const { getProductAverageRating, getProductReviewCount } = useReviews();
 
   useEffect(() => {
-    console.log(productId);
     requestUrl({
       method: "GET",
       endpoint: `products/${productId}`,
     })
       .then((res) => {
-        console.log(res.data);
         setProduct(res.data);
       })
       .catch((e) => {
         console.log(e);
       });
-  }, [productId]);
 
-  const addToCart = () => {
-    if (!product) return;
+    // Check if product is in cart
+    if (user?.id) {
+      requestUrl({
+        method: "GET",
+        endpoint: `cart/${user.id}`,
+      }).then((res) => {
+        const cartItems = res.data[0]?.items || [];
+        const item = cartItems.find((i: any) => i.id === productId);
+        if (item) {
+          setCartQuantity(item.quantity);
+        }
+      });
+    }
+  }, [productId, user?.id]);
+
+  const addToCart = (navigateAfter = false) => {
+    if (!product || !user?.id) return;
     requestUrl({
       method: "POST",
       endpoint: "cart/add",
       data: {
         user_id: user.id,
-        items: [{ ...product }],
+        items: [{ ...product, quantity: 1 }],
       },
     })
-      .then((res) => {
-        console.log(res.data);
-        navigate("/cart");
+      .then(() => {
+        setCartQuantity(1);
+        if (navigateAfter) navigate("/cart");
       })
-      .catch((e) => {
-        console.error(e);
-      });
+      .catch((e) => console.error(e));
+  };
+
+  const updateQuantity = (val: number) => {
+    const newQty = cartQuantity + val;
+    if (newQty < 0 || !user?.id || !productId) return;
+
+    requestUrl({
+      method: "PATCH",
+      endpoint: "cart/update-quantity",
+      data: {
+        user_id: user.id,
+        item_id: productId,
+        quantity: newQty
+      }
+    }).then(() => {
+      setCartQuantity(newQty);
+    }).catch(e => console.error(e));
   };
 
   const averageRating = getProductAverageRating(productId || '');
@@ -71,73 +99,104 @@ export default function ProductPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 gap-y-4 flex flex-col py-8">
+    <div className="container mx-auto px-4 gap-y-4 flex flex-col py-8 animate-in fade-in duration-500">
       <Link
-        className=" rounded-lg w-10 left-20 border-gray-300  hover:bg-gray-200 border bg-white text-gray-800 p-2"
+        className="rounded-xl w-12 h-12 flex items-center justify-center border-slate-200 hover:bg-slate-100 border bg-white text-slate-600 transition-colors shadow-sm"
         to={"/home"}
       >
-        <ChevronLeft className="" />
+        <ChevronLeft size={20} />
       </Link>
-      <Card className="overflow-hidden">
-        <CardContent className="p-6">
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="relative aspect-square">
+
+      <Card className="overflow-hidden border-none bg-white rounded-[2.5rem] shadow-2xl">
+        <CardContent className="p-8 lg:p-12">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            <div className="relative aspect-square group">
               <img
                 src={product.imageurl}
                 alt={product.name}
-                className="rounded-lg object-cover"
+                className="rounded-[2rem] object-cover w-full h-full shadow-lg transition-transform duration-700 group-hover:scale-[1.02]"
               />
-              <div className="absolute top-4 right-4">
+              <div className="absolute top-6 right-6 scale-125">
                 <WishlistButton product={product} />
               </div>
             </div>
-            <div className="flex flex-col justify-between">
-              <div>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <h1 className="text-3xl font-bold mb-2">{product.name}</h1>
-                    <p className="text-lg text-muted-foreground mb-2">
-                      {product.companyname}
-                    </p>
-                  </div>
+
+            <div className="space-y-8">
+              <div className="space-y-4">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-100 text-emerald-700 text-[10px] font-black uppercase tracking-widest">
+                  {product.companyname}
                 </div>
-                
-                {/* Rating Display */}
+                <h1 className="text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+                  {product.name}
+                </h1>
+
                 {reviewCount > 0 && (
-                  <div className="flex items-center gap-2 mb-4">
-                    <div className="flex items-center">
-                      <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
-                      <span className="ml-1 font-semibold">{averageRating.toFixed(1)}</span>
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-yellow-50 text-yellow-700 text-sm font-black">
+                      <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+                      {averageRating.toFixed(1)}
                     </div>
-                    <span className="text-sm text-muted-foreground">
-                      ({reviewCount} review{reviewCount !== 1 ? 's' : ''})
+                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
+                      {reviewCount} Verified Review{reviewCount !== 1 ? 's' : ''}
                     </span>
                   </div>
                 )}
-                
-                <p className="text-2xl font-semibold mb-4">{product.price}</p>
-                <p className="mb-6">
-                  Availability:{" "}
-                  <span className="font-semibold text-green-600">
-                    {product.quantity} in stock
-                  </span>
-                </p>
-                <div className="prose max-w-none mb-6">
-                  <p>
-                    This beautiful Multicolored Shimmery Striped Upcycled
-                    Handwoven Office Tote is the perfect blend of style and
-                    sustainability. Handcrafted by skilled artisans, this tote
-                    features a unique shimmery striped pattern that adds a touch
-                    of elegance to your office attire.
-                  </p>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-4xl font-black text-emerald-600">{product.price}</p>
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">In Stock: {product.quantity} Units</span>
                 </div>
               </div>
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button className="flex-1" onClick={addToCart}>
-                  <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
-                </Button>
-                <Button variant="outline" className="flex-1">
-                  Buy Now
+
+              <div className="prose prose-slate max-w-none">
+                <p className="text-slate-600 leading-relaxed font-medium">
+                  Experience the perfect fusion of recycled artistry and functional design. This handcrafted piece tells a story of sustainability, weaving together premium materials with artisanal precision to create something truly unique for your collection.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row gap-4 pt-4">
+                {cartQuantity > 0 ? (
+                  <div className="flex-1 h-14 bg-slate-100 rounded-2xl flex items-center justify-between px-2 overflow-hidden border border-slate-200">
+                    <Button
+                      variant="ghost"
+                      className="w-10 h-10 rounded-xl hover:bg-white hover:text-emerald-600 transition-all font-black text-xl"
+                      onClick={() => updateQuantity(-1)}
+                    >
+                      −
+                    </Button>
+                    <span className="font-black text-slate-900">{cartQuantity}</span>
+                    <Button
+                      variant="ghost"
+                      className="w-10 h-10 rounded-xl hover:bg-white hover:text-emerald-600 transition-all font-black text-xl"
+                      onClick={() => updateQuantity(1)}
+                    >
+                      +
+                    </Button>
+                  </div>
+                ) : (
+                  <Button
+                    className="flex-1 h-16 rounded-[1.25rem] bg-slate-900 text-white font-black text-lg hover:bg-emerald-600 transition-all hover:scale-[1.02] active:scale-[0.98] shadow-xl"
+                    onClick={() => addToCart(false)}
+                  >
+                    <ShoppingCart className="mr-3 h-5 w-5" /> Add to Cart
+                  </Button>
+                )}
+
+                <Button
+                  variant="outline"
+                  className="flex-1 h-16 rounded-[1.25rem] border-2 border-slate-200 text-slate-900 font-black text-lg hover:bg-slate-50 transition-all active:scale-[0.98]"
+                  onClick={() => {
+                    if (cartQuantity > 0) {
+                      navigate("/cart");
+                    } else {
+                      addToCart(true);
+                    }
+                  }}
+                >
+                  {cartQuantity > 0 ? "Proceed to Cart" : "Buy Now"}
                 </Button>
               </div>
             </div>
@@ -146,9 +205,9 @@ export default function ProductPage() {
       </Card>
 
       {/* Reviews Section */}
-      <ReviewsSection 
-        productId={productId || ''} 
-        productName={product.name || 'this product'} 
+      <ReviewsSection
+        productId={productId || ''}
+        productName={product.name || 'this product'}
       />
     </div>
   );
