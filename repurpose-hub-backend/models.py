@@ -21,7 +21,7 @@ class ProductResponse(BaseModel):
     id: str
     name: str
     price: str
-    quantity: int
+    stock: int
     companyname: str
     imageurl: str
 
@@ -29,7 +29,7 @@ class ProductResponse(BaseModel):
 class ProductCreate(BaseModel):
     name: str
     price: str
-    quantity: int
+    stock: int
     companyName: str
     image_url: str
 

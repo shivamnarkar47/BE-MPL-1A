@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "./ui/input";
-import { Search, TrendingUp, Star } from "lucide-react";
+import { Search, Star } from "lucide-react";
 import WishlistButton from "./WishlistButton";
 import PersonalizedRecommendations from "./PersonalizedRecommendations";
 import { Link } from "react-router-dom";
@@ -24,7 +24,7 @@ interface Product {
   imageurl: string;
   companyName?: string;
   companyname?: string;
-  quantity?: number;
+  stock?: number;
 }
 
 const MarketPlace = () => {
@@ -94,7 +94,7 @@ const MarketPlace = () => {
     }
     if (minPrice || maxPrice) {
       filtered = filtered.filter((product) => {
-        const price = parseFloat(product.price.replace(/[^\d.]/g, ''));
+        const price = parseFloat(product.price.replace(/^Rs\.\s*/, "").replace(/,/g, "").trim()) || 0;
         if (minPrice && price < minPrice) return false;
         if (maxPrice && price > maxPrice) return false;
         return true;
@@ -259,9 +259,9 @@ const MarketPlace = () => {
                     </div>
 
                     {/* Popular Badge */}
-                    {product.quantity! > 50 && (
+                    {product.stock! > 50 && (
                       <div className="absolute top-4 left-4 bg-emerald-500 text-white px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5 shadow-xl">
-                        <TrendingUp size={12} />
+                        <Star size={12} />
                         Trending
                       </div>
                     )}

@@ -15,7 +15,7 @@ type ProductType = {
   imageurl: string;
   name: string;
   price: string;
-  quantity: number;
+  stock: number;
 };
 
 export default function ProductPage() {
@@ -147,7 +147,7 @@ export default function ProductPage() {
                 <p className="text-4xl font-black text-emerald-600">{product.price}</p>
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">In Stock: {product.quantity} Units</span>
+                  <span className="text-xs font-bold text-slate-500 uppercase tracking-widest">In Stock: {product.stock} Units</span>
                 </div>
               </div>
 

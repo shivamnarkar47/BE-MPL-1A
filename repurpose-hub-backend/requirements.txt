@@ -5,3 +5,5 @@ requests
 python-multipart
 passlib
 argon2-cffi
+fpdf
+fpdf2

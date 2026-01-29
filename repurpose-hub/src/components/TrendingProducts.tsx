@@ -21,12 +21,13 @@ const TrendingProducts = () => {
           .filter((product: any) => product.quantity > 50) // Products with good stock
           .sort((a: any, b: any) => {
             // Sort by a combination of stock and price (higher priced items might be more popular)
-            const scoreA = (a.quantity || 0) + parseFloat(a.price.replace(/[^\d.]/g, '')) / 100;
-            const scoreB = (b.quantity || 0) + parseFloat(b.price.replace(/[^\d.]/g, '')) / 100;
+            const parsePrice = (p: string) => parseFloat(p.replace(/^Rs\.\s*/, "").replace(/,/g, "").trim()) || 0;
+            const scoreA = (a.quantity || 0) + parsePrice(a.price) / 100;
+            const scoreB = (b.quantity || 0) + parsePrice(b.price) / 100;
             return scoreB - scoreA;
           })
           .slice(0, 8); // Top 8 trending products
-        
+
         setTrendingProducts(trending);
       })
       .catch((e) => {
@@ -73,7 +74,7 @@ const TrendingProducts = () => {
                     <h3 className="font-semibold text-lg line-clamp-2 group-hover:text-green-600 transition-colors flex-1">
                       {product?.name}
                     </h3>
-                    <WishlistButton 
+                    <WishlistButton
                       product={product}
                       className="ml-2 flex-shrink-0"
                     />

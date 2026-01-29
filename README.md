@@ -212,6 +212,24 @@ See [docs/PHASE1_UPDATES.md](docs/PHASE1_UPDATES.md) for detailed documentation 
 - Product reviews & ratings
 - Fixed sidebar layout
 
+## Recent Updates (Invoice & UI Redesign)
+
+### Invoice PDF Generation
+- Added `/orders/{order_id}/invoice` endpoint for generating detailed PDF invoices
+- Invoices include sustainability impact report showing CO2 offset, water saved, and waste diverted
+- Downloadable directly from completed orders in Cart
+
+### UI Components Redesign
+- **About Section**: Redesigned with stats overlay, feature icons (Target, Heart, ShieldCheck), and enhanced typography
+- **Footer**: Redesigned with company information, social media links, and newsletter signup
+- **Hero Section**: Updated with smooth scroll navigation, enhanced button styling, and improved CTA
+
+### Bug Fixes & Improvements
+- Fixed price parsing to correctly handle "Rs." prefix in cart calculations
+- Standardized `quantity` field to `stock` across frontend and backend
+- Added 40+ new products from reCharkha vendor including Wrist Its and Basketery items
+- Added fpdf2 dependency for invoice generation
+
 ## Future Enhancements (Phase 2+)
 
 See [docs/FUTURE_ENHANCEMENTS.md](docs/FUTURE_ENHANCEMENTS.md) for planned features including:

@@ -15,7 +15,7 @@ const Navbar = () => {
 
   console.log(location.pathname)
   return (
-    <section className={cn(!user?.id ? "fixed w-full bg-white dark:bg-black z-10 border" : "flex w-full bg-white dark:bg-black z-10 border")}>
+    <section className={cn(!user?.id ? "fixed w-full bg-white/80 backdrop-blur-md dark:bg-black/80 z-50 border-b border-slate-100" : "flex w-full bg-white dark:bg-black z-50 border-b")}>
       <nav className="font-inter mx-auto h-auto w-full max-w-screen-2xl lg:relative lg:top-0">
         <div className="flex flex-col px-6 py-6 lg:flex-row lg:items-center lg:justify-between lg:px-10 lg:py-4 xl:px-20">
           {user?.id ? (
@@ -81,7 +81,7 @@ const Navbar = () => {
             className={`flex flex-col items-center space-y-8 lg:flex lg:flex-row lg:space-x-3 lg:space-y-0 ${isOpen ? "" : "hidden"}`}
           >
 
-{
+            {
               !user?.id ? (
                 <>
                   {/* Guest Cart Icon */}
@@ -153,7 +153,7 @@ const Navbar = () => {
                   <button
                     className="font-inter rounded-lg bg-black dark:bg-gray-100 dark:text-black px-8 py-4 text-center text-white hover:bg-gray-800"
                     onClick={async () => {
-                     navigate("/logout") 
+                      navigate("/logout")
                     }}
                   >
                     Logout
@@ -206,9 +206,9 @@ const Navbar = () => {
 // Guest Cart Badge Component
 const GuestCartBadge = () => {
   const { guestCartCount } = useGuestCart();
-  
+
   if (guestCartCount === 0) return null;
-  
+
   return (
     <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
       {guestCartCount > 99 ? '99+' : guestCartCount}
@@ -219,9 +219,9 @@ const GuestCartBadge = () => {
 // Wishlist Badge Component
 const WishlistBadge = () => {
   const { wishlistCount } = useWishlist();
-  
+
   if (wishlistCount === 0) return null;
-  
+
   return (
     <span className="absolute -top-1 -right-1 bg-pink-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
       {wishlistCount > 99 ? '99+' : wishlistCount}
