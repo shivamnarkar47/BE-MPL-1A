@@ -12,15 +12,17 @@ const Home = () => {
   if (user != null) {
     return <Navigate to="/home" replace />
   }
-return (
-    <>
+  return (
+    <div className="flex flex-col min-h-screen">
       <Hero />
-      <TrendingProducts />
-      <PersonalizedRecommendations />
-      <About />
-      <WhyUs />
+      <div className="space-y-0">
+        <TrendingProducts />
+        <PersonalizedRecommendations />
+        <About />
+        <WhyUs />
+      </div>
       <Footer />
-    </>
+    </div>
   )
 }
 

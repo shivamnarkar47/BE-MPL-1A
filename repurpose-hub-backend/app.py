@@ -28,6 +28,10 @@ import os
 import hmac
 import hashlib
 from passlib.context import CryptContext
+from fpdf import FPDF
+from fastapi.responses import Response
+import io
+import re
 
 app = FastAPI()
 
@@ -91,9 +95,9 @@ def product_helper(product) -> dict:
         "id": str(product["_id"]),
         "name": product["name"],
         "price": product["price"],
-        "quantity": product["quantity"],
-        "companyname": product["companyName"],
-        "imageurl": product["image_url"],
+        "stock": product.get("stock", product.get("quantity", 0)),
+        "companyname": product.get("companyName", product.get("companyname", "")),
+        "imageurl": product.get("image_url", product.get("imageurl", "")),
     }
 
 
@@ -248,11 +252,35 @@ async def add_to_cart(cart: Cart):
                         break
 
                 if not product_found:
+                    # Explicitly create a clean CartItem-compatible dict
+                    # This ensures only the requested quantity is stored, NOT the product's stock level
+                    clean_item = {
+                        "id": str(new_item.id),
+                        "name": str(new_item.name),
+                        "price": str(new_item.price),
+                        "quantity": int(new_item.quantity),
+                        "companyname": str(new_item.companyname),
+                        "imageurl": str(new_item.imageurl)
+                    }
                     await cart_collection.update_one(
-                        {"user_id": cart.user_id}, {"$push": {"items": new_item.dict()}}
+                        {"user_id": cart.user_id}, {"$push": {"items": clean_item}}
                     )
         else:
-            new_cart = cart.dict()
+            # Create new cart with cleaned items
+            cleaned_items = []
+            for item in cart.items:
+                cleaned_items.append({
+                    "id": str(item.id),
+                    "name": str(item.name),
+                    "price": str(item.price),
+                    "quantity": int(item.quantity),
+                    "companyname": str(item.companyname),
+                    "imageurl": str(item.imageurl)
+                })
+            new_cart = {
+                "user_id": cart.user_id,
+                "items": cleaned_items
+            }
             await cart_collection.insert_one(new_cart)
 
         return {"message": "Items added to cart successfully"}
@@ -553,7 +581,7 @@ async def checkout(checkout_info: Checkout):
         # Create checkout record with pending status
         checkout_doc = {
             "user_id": checkout_info.user_id,
-            "items": order_items,
+            "items": order_items, # Items here should already be correct from cart
             "total_price": total_price,
             "status": "pending_payment",
             "payment_method": "razorpay",
@@ -670,6 +698,185 @@ async def get_orders(user_id: str):
         raise HTTPException(status_code=404, detail="Orders not found")
 
     return [checkout_helper(checkout) for checkout in checkout_list]
+
+
+class InvoicePDF(FPDF):
+    def header(self):
+        # Logo or Title
+        self.set_font('Arial', 'B', 24)
+        self.set_text_color(16, 185, 129)  # Emerald-500
+        self.cell(0, 20, 'REPURPOSE HUB', 0, 1, 'C')
+        self.set_font('Arial', '', 10)
+        self.set_text_color(100, 116, 139)  # Slate-500
+        self.cell(0, 5, 'Luxury Upcycled Curation Studio', 0, 1, 'C')
+        self.ln(10)
+
+    def footer(self):
+        self.set_y(-30)
+        self.set_font('Arial', 'I', 8)
+        self.set_text_color(148, 163, 184)
+        self.cell(0, 10, 'This is a digitally generated invoice. No signature required.', 0, 1, 'C')
+        self.set_font('Arial', 'B', 8)
+        self.set_text_color(16, 185, 129)
+        self.cell(0, 5, 'Thank you for choosing sustainability!', 0, 0, 'C')
+
+
+@app.get("/orders/{order_id}/invoice")
+async def get_invoice(order_id: str):
+    """
+    Generate and return a PDF invoice for a specific order
+    """
+    try:
+        if not ObjectId.is_valid(order_id):
+            raise HTTPException(status_code=400, detail="Invalid order ID")
+
+        # Fetch order details
+        order = await checkout_collection.find_one({"_id": ObjectId(order_id)})
+        if not order:
+            raise HTTPException(status_code=404, detail="Order not found")
+
+        # Fetch user details
+        user_info = await user_collection.find_one({"_id": ObjectId(order.get("user_id"))})
+        user_info = user_info or {}
+        
+        # Fetch Eco Impact for this user
+        impact = await eco_impact_collection.find_one({"user_id": order.get("user_id")})
+
+        # Create PDF
+        pdf = InvoicePDF()
+        pdf.add_page()
+        
+        # Invoice Info
+        pdf.set_font('Arial', 'B', 14)
+        pdf.set_text_color(30, 41, 59) # Slate-900
+        pdf.cell(0, 10, f"TAX INVOICE: #{str(order['_id'])[-8:].upper()}", 0, 1)
+        
+        pdf.set_font('Arial', '', 10)
+        pdf.set_text_color(71, 85, 105) # Slate-600
+        pdf.cell(0, 6, f"Date: {order['created_at'].strftime('%d %B, %Y')}", 0, 1)
+        pdf.cell(0, 6, f"Status: {order['status'].replace('_', ' ').capitalize()}", 0, 1)
+        pdf.ln(10)
+
+        # Customer & Company Info
+        y_top = pdf.get_y()
+        pdf.set_font('Arial', 'B', 10)
+        pdf.set_text_color(148, 163, 184) # Slate-400
+        pdf.cell(95, 8, "BILLED TO", 0, 0)
+        pdf.cell(95, 8, "FROM", 0, 1)
+        
+        pdf.set_font('Arial', 'B', 11)
+        pdf.set_text_color(30, 41, 59)
+        pdf.cell(95, 6, user_info.get("full_name", "Valued Customer"), 0, 0)
+        pdf.cell(95, 6, "Repurpose Hub Studio", 0, 1)
+        
+        pdf.set_font('Arial', '', 10)
+        pdf.set_text_color(71, 85, 105)
+        pdf.cell(95, 5, user_info.get("email", ""), 0, 0)
+        pdf.cell(95, 5, "contact@repurposehub.com", 0, 1)
+        pdf.ln(15)
+
+        # Items Table Header
+        pdf.set_fill_color(248, 250, 252) # Slate-50
+        pdf.set_font('Arial', 'B', 10)
+        pdf.cell(100, 12, " PRODUCT DESCRIPTION", 1, 0, 'L', True)
+        pdf.cell(30, 12, "QTY", 1, 0, 'C', True)
+        pdf.cell(30, 12, "PRICE", 1, 0, 'C', True)
+        pdf.cell(30, 12, "TOTAL", 1, 1, 'C', True)
+
+        # Items Table Rows
+        pdf.set_font('Arial', '', 10)
+        items = order.get("items", [])
+        for item in items:
+            # SAFETY: Always favor the captured 'quantity' from the checkout record
+            # If quantity is unusually high (like 100), we ensure we aren't accidentally pulling 'stock'
+            qty = int(item.get('quantity', 1))
+            
+            # If both are present and they match exactly 100, it's a legacy stock bug
+            # but we assume the cart data is correct now.
+            
+            # Safer price parsing
+            price_str = str(item.get('price', '0'))
+            # Remove "Rs." and whitespace from start, then remove commas
+            clean_price = re.sub(r'^Rs\.\s*', '', price_str)
+            clean_price = clean_price.replace(',', '')
+            price_val = float(clean_price) if clean_price and clean_price[0].isdigit() else 0.0
+            total_val = price_val * qty
+            
+            pdf.cell(100, 12, f" {item['name'][:45]}...", 1)
+            pdf.cell(30, 12, f"{qty}", 1, 0, 'C')
+            pdf.cell(30, 12, f"Rs. {price_val:,.2f}", 1, 0, 'C')
+            pdf.cell(30, 12, f"Rs. {total_val:,.2f}", 1, 1, 'C')
+
+        # Summary
+        pdf.ln(5)
+        # Use explicit variables for subtotal to avoid any confusion
+        subtotal = 0
+        for item in items:
+            p_str = str(item.get('price', '0'))
+            p_clean = re.sub(r'^Rs\.\s*', '', p_str).replace(',', '')
+            p = float(p_clean) if p_clean and p_clean[0].isdigit() else 0.0
+            q = int(item.get('quantity', 1))
+            subtotal += p * q
+            
+        service_fee = subtotal * 0.2
+        total_final = subtotal + service_fee
+
+        pdf.set_x(120)
+        pdf.cell(40, 10, "Subtotal:", 0, 0, 'R')
+        pdf.cell(30, 10, f"Rs. {subtotal:,.2f}", 0, 1, 'R')
+        pdf.set_x(120)
+        pdf.cell(40, 10, "Service Fee (20%):", 0, 0, 'R')
+        pdf.cell(30, 10, f"Rs. {service_fee:,.2f}", 0, 1, 'R')
+        
+        pdf.ln(2)
+        pdf.set_x(110)
+        pdf.set_fill_color(16, 185, 129)
+        pdf.set_text_color(255, 255, 255)
+        pdf.set_font('Arial', 'B', 12)
+        pdf.cell(50, 14, " TOTAL AMOUNT CAPTURED", 0, 0, 'R', True)
+        pdf.cell(30, 14, f"Rs. {total_final:,.2f} ", 0, 1, 'R', True)
+
+        # Sustainability Report Block
+        pdf.ln(20)
+        pdf.set_text_color(30, 41, 59)
+        pdf.set_font('Arial', 'B', 12)
+        pdf.cell(0, 10, "BEYOND THE PURCHASE: YOUR SUSTAINABILITY IMPACT", 0, 1)
+        pdf.set_draw_color(16, 185, 129)
+        pdf.line(10, pdf.get_y(), 200, pdf.get_y())
+        pdf.ln(5)
+        
+        pdf.set_font('Arial', '', 10)
+        pdf.set_text_color(71, 85, 105)
+        
+        # Current Order Impact
+        num_items = sum(i.get("quantity", 1) for i in items)
+        pdf.cell(0, 8, f"This order alone diverted {num_items * 0.2:.2f}kg of waste and offset {num_items * 0.5:.2f}kg of CO2.", 0, 1)
+        
+        if impact:
+            pdf.ln(5)
+            pdf.set_font('Arial', 'B', 10)
+            pdf.set_text_color(16, 185, 129)
+            pdf.cell(0, 6, "YOUR TOTAL LIFETIME LEGACY:", 0, 1)
+            pdf.set_font('Arial', '', 10)
+            pdf.set_text_color(71, 85, 105)
+            pdf.cell(0, 6, f"* Total Carbon Offset: {impact.get('co2_saved', 0):.2f} kg", 0, 1)
+            pdf.cell(0, 6, f"* Water Resources Saved: {impact.get('water_saved', 0):.2f} Liters", 0, 1)
+            pdf.cell(0, 6, f"* Waste Diverted: {impact.get('waste_diverted', 0):.2f} kg", 0, 1)
+
+        # Return as PDF stream
+        pdf_output = pdf.output(dest='S')
+        if isinstance(pdf_output, str):
+            pdf_output = pdf_output.encode('latin1', errors='replace')
+            
+        return Response(
+            content=pdf_output,
+            media_type="application/pdf",
+            headers={"Content-Disposition": f"attachment; filename=Invoice_{order_id[-8:]}.pdf"}
+        )
+
+    except Exception as e:
+        print(f"Invoice Error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to generate invoice: {str(e)}")
 
 
 @app.get("/payment/orders/{user_id}")

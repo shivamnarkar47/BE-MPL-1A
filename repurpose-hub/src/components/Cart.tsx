@@ -18,7 +18,8 @@ import {
   ChevronRight,
   Calendar,
   Info,
-  ShoppingBag
+  ShoppingBag,
+  Download
 } from "lucide-react";
 import {
   Dialog,
@@ -95,7 +96,6 @@ export default function CartPage() {
         ...cart,
         items: cart.items.map((item) => ({
           ...item,
-          stock: 100,
         })),
       }));
 
@@ -131,6 +131,27 @@ export default function CartPage() {
     }
   }, [user?.id]);
 
+  const handleDownloadInvoice = async (orderId: string) => {
+    try {
+      const response = await requestUrl({
+        method: "GET",
+        endpoint: `orders/${orderId}/invoice`,
+        responseType: "blob"
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', `Invoice_${orderId.slice(-8)}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (err) {
+      console.error("Error downloading invoice:", err);
+      setError("Failed to download invoice.");
+    }
+  };
+
   useEffect(() => {
     if (!isPaymentDialogOpen) {
       const timer = setTimeout(() => {
@@ -144,7 +165,8 @@ export default function CartPage() {
   function calculateCartTotal(items: CartItem[]): number {
     if (!items || items.length === 0) return 0;
     return items.reduce((total, item) => {
-      const numericPrice = parseFloat(item.price.replace("Rs.", "").replace(/,/g, "").trim());
+      const cleanPrice = item.price.replace(/^Rs\.\s*/, "").replace(/,/g, "").trim();
+      const numericPrice = parseFloat(cleanPrice) || 0;
       return total + (numericPrice * item.quantity);
     }, 0);
   }
@@ -336,8 +358,8 @@ export default function CartPage() {
                         </p>
 
                         <div className="flex flex-wrap items-center gap-3">
-                          <span className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-green-50 text-green-600 border border-green-100/50">
-                            In Stock
+                          <span className="px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider bg-slate-50 text-slate-500 border border-slate-100">
+                            Units Ordered
                           </span>
                           <div className="flex items-center bg-slate-100 rounded-full px-1 py-1">
                             <Button
@@ -544,6 +566,17 @@ export default function CartPage() {
                                 <div className="space-y-6">
                                   <div className="flex items-center justify-between">
                                     <h4 className="text-slate-400 font-bold uppercase tracking-widest text-xs">Articles Purchased ({selectedOrder?.items?.length})</h4>
+                                    {selectedOrder?.status === 'completed' && (
+                                      <Button
+                                        size="sm"
+                                        variant="outline"
+                                        onClick={() => handleDownloadInvoice(selectedOrder._id || selectedOrder.id)}
+                                        className="h-8 rounded-lg border-emerald-200 text-emerald-600 hover:bg-emerald-50 text-[10px] font-black uppercase tracking-widest gap-2"
+                                      >
+                                        <Download className="w-3 h-3" />
+                                        Invoice
+                                      </Button>
+                                    )}
                                   </div>
 
                                   <ScrollArea className="h-[300px] -mx-8 px-8">

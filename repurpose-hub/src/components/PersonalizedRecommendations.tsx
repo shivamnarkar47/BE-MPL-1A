@@ -15,7 +15,7 @@ interface Product {
   imageurl: string;
   companyName?: string;
   companyname?: string;
-  quantity?: number;
+  stock?: number;
 }
 
 const PersonalizedRecommendations = () => {
@@ -83,7 +83,7 @@ const PersonalizedRecommendations = () => {
         }
 
         // Trending products (medium weight)
-        if (product.quantity && product.quantity > 80) {
+        if (product.stock && product.stock > 80) {
           score += 1;
         }
 
@@ -109,8 +109,8 @@ const PersonalizedRecommendations = () => {
     } else if (products.length > 0 && wishlist.length === 0) {
       // If no wishlist, show trending products as recommendations
       const trending = products
-        .filter(p => p.quantity && p.quantity > 60)
-        .sort((a, b) => (b.quantity || 0) - (a.quantity || 0))
+        .filter(p => p.stock && p.stock > 60)
+        .sort((a, b) => (b.stock || 0) - (a.stock || 0))
         .slice(0, 4);
       setRecommendations(trending);
     }

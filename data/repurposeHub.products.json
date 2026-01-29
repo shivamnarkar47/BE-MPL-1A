@@ -1,120 +1,456 @@
 [{
   "_id": {
-    "$oid": "67f12ab10b738934e4a7e1c0"
+    "$oid": "6979052fdb98012431bdf7e9"
   },
-  "imageurl": "https://www.recharkha.org/cdn/shop/files/Blue_Yellow_Mix_Ikkat_Pattern_Upcycled_Handwoven_Designer_Shopper_Tote_DST0225-007_PS_W.jpg?v=1740400204&width=1100",
-  "name": "Blue Yellow Mix Ikkat Pattern Upcycled Handwoven Designer Shopper Tote (DST0225-007) PS_W",
-  "price": "Rs. 2,550",
-  "companyName": "Recharkha",
+  "name": "Upcycled Handcrafted Wrist It (WI1025-009) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-009_PS_W.jpg?v=1761741501&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-009-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47175904854272",
+  "quantity": 100,
+  "companyName": "reCharkha"
+},
+{
+  "_id": {
+    "$oid": "6979052fdb98012431bdf7ea"
+  },
+  "name": "Upcycled Handcrafted Wrist It (WI1025-008) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-008_PS_W.jpg?v=1761741422&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-008-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47175870578944",
+  "quantity": 100,
+  "companyName": "reCharkha"
+},
+{
+  "_id": {
+    "$oid": "6979052fdb98012431bdf7eb"
+  },
+  "name": "Upcycled Handcrafted Wrist It (WI1025-007) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-007_PS_W.jpg?v=1761741340&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-007-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47175841710336",
+  "quantity": 100,
+  "companyName": "reCharkha"
+},
+{
+  "_id": {
+    "$oid": "6979052fdb98012431bdf7ec"
+  },
+  "name": "Upcycled Handcrafted Wrist It (WI1025-006) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-006_PS_W.jpg?v=1761741277&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-006-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47175810711808",
+  "quantity": 100,
+  "companyName": "reCharkha"
+},
+{
+  "_id": {
+    "$oid": "6979052fdb98012431bdf7ed"
+  },
+  "name": "Upcycled Handcrafted Wrist It (WI1025-005) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-005_PS_W.jpg?v=1761741212&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-005-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47175805600000",
+  "quantity": 100,
+  "companyName": "reCharkha"
+},
+{
+  "_id": {
+    "$oid": "6979052fdb98012431bdf7ee"
+  },
+  "name": "Upcycled Handcrafted Wrist It (WI1025-004) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-004_PS_W.jpg?v=1761741153&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-004-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47175800520960",
+  "quantity": 100,
+  "companyName": "reCharkha"
+},
+{
+  "_id": {
+    "$oid": "6979052fdb98012431bdf7ef"
+  },
+  "name": "Upcycled Handcrafted Wrist It (WI1025-012) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-012_PS_W.jpg?v=1761808748&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-012-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180604866816",
+  "quantity": 100,
+  "companyName": "reCharkha"
+},
+{
+  "_id": {
+    "$oid": "6979052fdb98012431bdf7f0"
+  },
+  "name": "Upcycled Handcrafted Wrist It (WI1025-002) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-002_PS_W.jpg?v=1761741025&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-002-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47175770374400",
+  "quantity": 100,
+  "companyName": "reCharkha"
+},
+{
+  "_id": {
+    "$oid": "6979052fdb98012431bdf7f1"
+  },
+  "name": "Upcycled Handcrafted Wrist It (WI1025-001) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-001_PS_W.jpg?v=1761740966&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-001-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47175735673088",
+  "quantity": 100,
+  "companyName": "reCharkha"
+},
+{
+  "_id": {
+    "$oid": "6979052fdb98012431bdf7f2"
+  },
+  "name": "Upcycled Handcrafted Wrist It (WI1025-011) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-011_PS_W.jpg?v=1761808684&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-011-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180594643200",
+  "quantity": 100,
+  "companyName": "reCharkha"
+},
+{
+  "_id": {
+    "$oid": "6979052fdb98012431bdf7f3"
+  },
+  "name": "Upcycled Handcrafted Wrist It (WI1025-010) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-010_PS_W.jpg?v=1761741630&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-010-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47175908720896",
+  "quantity": 100,
+  "companyName": "reCharkha"
+},
+{
+  "_id": {
+    "$oid": "6979052fdb98012431bdf7f4"
+  },
+  "name": "Upcycled Handcrafted Wrist It (WI1025-003) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-003_PS_W.jpg?v=1761741100&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-003-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47175794393344",
+  "quantity": 100,
+  "companyName": "reCharkha"
+},
+{
+  "_id": {
+    "$oid": "6979175d5a2f861d3b6c882b"
+  },
+  "name": "Upcycled Handcrafted Wrist It (WI1025-024) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-024_PS_W.jpg?v=1761809669&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-024-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180837552384",
+  "companyName": "reCharkha",
   "quantity": 100
 },
 {
   "_id": {
-    "$oid": "67f12ab10b738934e4a7e1c1"
+    "$oid": "6979175d5a2f861d3b6c882c"
   },
-  "imageurl": "https://www.recharkha.org/cdn/shop/files/Cassette_Tape_Wedge_Upcycled_Handwoven_Designer_Shopper_Tote_DST0225-008_PS_W.jpg?v=1740400315&width=1100",
-  "name": "Cassette Tape Wedge Upcycled Handwoven Designer Shopper Tote (DST0225-008) PS_W",
-  "price": "Rs. 2,550",
-  "companyName": "Recharkha",
+  "name": "Upcycled Handcrafted Wrist It (WI1025-023) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-023_PS_W.jpg?v=1761809614&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-023-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180833030400",
+  "companyName": "reCharkha",
   "quantity": 100
 },
 {
   "_id": {
-    "$oid": "67f12ab10b738934e4a7e1c2"
+    "$oid": "6979175d5a2f861d3b6c882d"
   },
-  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Shopper_Tote_ST0325-002_PS_W.jpg?v=1742644531&width=1100",
-  "name": "Upcycled Handwoven Shopper Tote (ST0325-002) PS_W",
-  "price": "Rs. 1,950",
-  "companyName": "Recharkha",
+  "name": "Upcycled Handcrafted Wrist It (WI1025-022) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-022_PS_W.jpg?v=1761809453&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-022-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180810617088",
+  "companyName": "reCharkha",
   "quantity": 100
 },
 {
   "_id": {
-    "$oid": "67f12ab10b738934e4a7e1c3"
+    "$oid": "6979175d5a2f861d3b6c882e"
   },
-  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Shopper_Tote_ST0325-003_PS_W.jpg?v=1742644614&width=1100",
-  "name": "Upcycled Handwoven Shopper Tote (ST0325-003) PS_W",
-  "price": "Rs. 1,950",
-  "companyName": "Recharkha",
+  "name": "Upcycled Handcrafted Wrist It (WI1025-021) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-021_PS_W.jpg?v=1761809407&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-021-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180805865728",
+  "companyName": "reCharkha",
   "quantity": 100
 },
 {
   "_id": {
-    "$oid": "67f12ab10b738934e4a7e1c4"
+    "$oid": "6979175d5a2f861d3b6c882f"
   },
-  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Shopper_Tote_ST0325-007_PS_W.jpg?v=1742645283&width=1100",
-  "name": "Upcycled Handwoven Shopper Tote (ST0325-007) PS_W",
-  "price": "Rs. 1,950",
-  "companyName": "Recharkha",
+  "name": "Upcycled Handcrafted Wrist It (WI1025-020) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-020_PS_W.jpg?v=1761809367&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-020-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180799901952",
+  "companyName": "reCharkha",
   "quantity": 100
 },
 {
   "_id": {
-    "$oid": "67f12ab10b738934e4a7e1c5"
+    "$oid": "6979175d5a2f861d3b6c8830"
   },
-  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Shopper_Tote_ST0325-009_PS_W.jpg?v=1742645419&width=1100",
-  "name": "Upcycled Handwoven Shopper Tote (ST0325-009) PS_W",
-  "price": "Rs. 1,950",
-  "companyName": "Recharkha",
+  "name": "Upcycled Handcrafted Wrist It (WI1025-019) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-019_PS_W.jpg?v=1761809316&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-019-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180792758528",
+  "companyName": "reCharkha",
   "quantity": 100
 },
 {
   "_id": {
-    "$oid": "67f12ab10b738934e4a7e1c6"
+    "$oid": "6979175d5a2f861d3b6c8831"
   },
-  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Designer_Shopper_Tote_DST0325-002_PS_W.jpg?v=1742647652&width=1100",
-  "name": "Upcycled Handwoven Designer Shopper Tote (DST0325-002) PS_W",
-  "price": "Rs. 2,550",
-  "companyName": "Recharkha",
+  "name": "Upcycled Handcrafted Wrist It (WI1025-018) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-018_PS_W.jpg?v=1761809261&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-018-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180788236544",
+  "companyName": "reCharkha",
   "quantity": 100
 },
 {
   "_id": {
-    "$oid": "67f12ab10b738934e4a7e1c7"
+    "$oid": "6979175d5a2f861d3b6c8832"
   },
-  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Designer_Shopper_Tote_DST0325-003_PS_W.jpg?v=1742647737&width=1100",
-  "name": "Upcycled Handwoven Designer Shopper Tote (DST0325-003) PS_W",
-  "price": "Rs. 2,550",
-  "companyName": "Recharkha",
+  "name": "Upcycled Handcrafted Wrist It (WI1025-017) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-017_PS_W.jpg?v=1761809221&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-017-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180780339456",
+  "companyName": "reCharkha",
   "quantity": 100
 },
 {
   "_id": {
-    "$oid": "67f12ab10b738934e4a7e1c8"
+    "$oid": "6979175d5a2f861d3b6c8833"
   },
-  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Designer_Shopper_Tote_DST0325-004_PS_W.jpg?v=1742647826&width=1100",
-  "name": "Upcycled Handwoven Designer Shopper Tote (DST0325-004) PS_W",
-  "price": "Rs. 2,550",
-  "companyName": "Recharkha",
+  "name": "Upcycled Handcrafted Wrist It (WI1025-016) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-016_PS_W.jpg?v=1761809166&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-016-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180753600768",
+  "companyName": "reCharkha",
   "quantity": 100
 },
 {
   "_id": {
-    "$oid": "67f12ab10b738934e4a7e1c9"
+    "$oid": "6979175d5a2f861d3b6c8834"
   },
-  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Designer_Shopper_Tote_DST0325-005_PS_W.jpg?v=1742647891&width=1100",
-  "name": "Upcycled Handwoven Designer Shopper Tote (DST0325-005) PS_W",
-  "price": "Rs. 2,550",
-  "companyName": "Recharkha",
+  "name": "Upcycled Handcrafted Wrist It (WI1025-015) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-015_PS_W.jpg?v=1761808952&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-015-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180646023424",
+  "companyName": "reCharkha",
   "quantity": 100
 },
 {
   "_id": {
-    "$oid": "67f12ab10b738934e4a7e1ca"
+    "$oid": "6979175d5a2f861d3b6c8835"
   },
-  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Designer_Shopper_Tote_DST0325-006_PS_W.jpg?v=1742648043&width=1100",
-  "name": "Upcycled Handwoven Designer Shopper Tote (DST0325-006) PS_W",
-  "price": "Rs. 2,550",
-  "companyName": "Recharkha",
+  "name": "Upcycled Handcrafted Wrist It (WI1025-014) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-014_PS_W.jpg?v=1761808880&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-014-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180620497152",
+  "companyName": "reCharkha",
   "quantity": 100
 },
 {
   "_id": {
-    "$oid": "67f12ab10b738934e4a7e1cb"
+    "$oid": "6979175d5a2f861d3b6c8836"
   },
-  "imageurl": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handwoven_Designer_Shopper_Tote_DST0325-007_PS_W.jpg?v=1742648283&width=1100",
-  "name": "Upcycled Handwoven Designer Shopper Tote (DST0325-007) PS_W",
-  "price": "Rs. 2,550",
-  "companyName": "Recharkha",
+  "name": "Upcycled Handcrafted Wrist It (WI1025-013) PS_W",
+  "price": "Rs. 640",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Wrist_It_WI1025-013_PS_W.jpg?v=1761808819&width=1100",
+  "product_url": "https://www.recharkha.org/collections/all/products/upcycled-handcrafted-wrist-it-wi1025-013-ps_w",
+  "vendor": "reCharkha EcoSocial",
+  "variant_id": "47180614172928",
+  "companyName": "reCharkha",
   "quantity": 100
+},
+{
+  "_id": {
+    "$oid": "697918605a2f861d3b6c8839"
+  },
+  "name": "Upcycled Handcrafted Origami Basketery Deco Storage Small (BDSS0126-010)",
+  "price": "Rs. 1,100",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Origami_Basketery_Deco_Storage_Small_BDSS0126-010.jpg?v=1767672538&width=1100",
+  "product_url": "https://www.recharkha.org/collections/basketry-deco-storage-small/products/upcycled-handcrafted-origami-basketery-deco-storage-small-bdss0126-010",
+  "variant_id": "47548052570368",
+  "quantity": 100,
+  "companyName": "reCharkha EcoSocial"
+},
+{
+  "_id": {
+    "$oid": "697918605a2f861d3b6c883a"
+  },
+  "name": "Upcycled Handcrafted Origami Basketery Deco Storage Small (BDSS0126-009)",
+  "price": "Rs. 1,100",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Origami_Basketery_Deco_Storage_Small_BDSS0126-009.jpg?v=1767672300&width=1100",
+  "product_url": "https://www.recharkha.org/collections/basketry-deco-storage-small/products/upcycled-handcrafted-origami-basketery-deco-storage-small-bdss0126-009",
+  "variant_id": "47547941847296",
+  "quantity": 100,
+  "companyName": "reCharkha EcoSocial"
+},
+{
+  "_id": {
+    "$oid": "697918605a2f861d3b6c883b"
+  },
+  "name": "Upcycled Handcrafted Origami Basketery Deco Storage Small (BDSS0126-008)",
+  "price": "Rs. 1,100",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Origami_Basketery_Deco_Storage_Small_BDSS0126-008.jpg?v=1767672037&width=1100",
+  "product_url": "https://www.recharkha.org/collections/basketry-deco-storage-small/products/upcycled-handcrafted-origami-basketery-deco-storage-small-bdss0126-008",
+  "variant_id": "47547933884672",
+  "quantity": 100,
+  "companyName": "reCharkha EcoSocial"
+},
+{
+  "_id": {
+    "$oid": "697918605a2f861d3b6c883c"
+  },
+  "name": "Upcycled Handcrafted Origami Basketery Deco Storage Small (BDSS0126-007)",
+  "price": "Rs. 1,100",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Origami_Basketery_Deco_Storage_Small_BDSS0126-007.jpg?v=1767671831&width=1100",
+  "product_url": "https://www.recharkha.org/collections/basketry-deco-storage-small/products/upcycled-handcrafted-origami-basketery-deco-storage-small-bdss0126-007",
+  "variant_id": "47547922546944",
+  "quantity": 100,
+  "companyName": "reCharkha EcoSocial"
+},
+{
+  "_id": {
+    "$oid": "697918605a2f861d3b6c883d"
+  },
+  "name": "Upcycled Handcrafted Origami Basketery Deco Storage Small (BDSS0126-006)",
+  "price": "Rs. 1,100",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Origami_Basketery_Deco_Storage_Small_BDSS0126-006.jpg?v=1767671649&width=1100",
+  "product_url": "https://www.recharkha.org/collections/basketry-deco-storage-small/products/upcycled-handcrafted-origami-basketery-deco-storage-small-bdss0126-005-copy",
+  "variant_id": "47547908456704",
+  "quantity": 100,
+  "companyName": "reCharkha EcoSocial"
+},
+{
+  "_id": {
+    "$oid": "697918605a2f861d3b6c883e"
+  },
+  "name": "Upcycled Handcrafted Origami Basketery Deco Storage Small (BDSS0126-005)",
+  "price": "Rs. 1,100",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Origami_Basketery_Deco_Storage_Small_BDSS0126-005.jpg?v=1767671357&width=1100",
+  "product_url": "https://www.recharkha.org/collections/basketry-deco-storage-small/products/upcycled-handcrafted-origami-basketery-deco-storage-small-bdss0126-004-copy",
+  "variant_id": "47547903967488",
+  "quantity": 100,
+  "companyName": "reCharkha EcoSocial"
+},
+{
+  "_id": {
+    "$oid": "697918605a2f861d3b6c883f"
+  },
+  "name": "Upcycled Handcrafted Origami Basketery Deco Storage Small (BDSS0126-003)",
+  "price": "Rs. 1,100",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Origami_Basketery_Deco_Storage_Small_size_BDSS0126-003.jpg?v=1767496187&width=1100",
+  "product_url": "https://www.recharkha.org/collections/basketry-deco-storage-small/products/upcycled-handcrafted-origami-basketery-deco-storage-small-bdss0126-3",
+  "variant_id": "47520644595968",
+  "quantity": 100,
+  "companyName": "reCharkha EcoSocial"
+},
+{
+  "_id": {
+    "$oid": "697918605a2f861d3b6c8840"
+  },
+  "name": "Upcycled Handcrafted Origami Basketery Deco Storage Small (BDSS0126-003)",
+  "price": "Rs. 1,100",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Origami_Basketery_Deco_Storage_Small_BDSS0126-003.jpg?v=1767433186&width=1100",
+  "product_url": "https://www.recharkha.org/collections/basketry-deco-storage-small/products/upcycled-handcrafted-origami-basketery-deco-storage-small-bdss0126-003",
+  "variant_id": "47520313508096",
+  "quantity": 100,
+  "companyName": "reCharkha EcoSocial"
+},
+{
+  "_id": {
+    "$oid": "697918605a2f861d3b6c8841"
+  },
+  "name": "Upcycled Handcrafted Origami Basketery Deco Storage Small (BDSS0126-002)",
+  "price": "Rs. 1,100",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Upcycled_Handcrafted_Origami_Basketery_Deco_Storage_Small_BDSS0126-002.jpg?v=1767670760&width=1100",
+  "product_url": "https://www.recharkha.org/collections/basketry-deco-storage-small/products/upcycled-handcrafted-origami-basketery-deco-storage-small-bdss0126-002",
+  "variant_id": "47520170574080",
+  "quantity": 100,
+  "companyName": "reCharkha EcoSocial"
+},
+{
+  "_id": {
+    "$oid": "697918605a2f861d3b6c8842"
+  },
+  "name": "Upcycled Handcrafted Origami Deco Storage Small (BDSS1224-016)",
+  "price": "Rs. 1,100",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Black_Yellow_Upcycled_Handcrafted_Origami_Deco_Storage_Small_BDSS1224-016.jpg?v=1735040894&width=1100",
+  "product_url": "https://www.recharkha.org/collections/basketry-deco-storage-small/products/black-yellow-upcycled-handcrafted-origami-deco-storage-small-bdss1224-016",
+  "variant_id": "46194123899136",
+  "quantity": 100,
+  "companyName": "reCharkha EcoSocial"
+},
+{
+  "_id": {
+    "$oid": "697918605a2f861d3b6c8843"
+  },
+  "name": "Yellow Black Upcycled Handcrafted Origami Deco Storage Small (BDSS1224-001)",
+  "price": "Rs. 1,100",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/Yellow_Black_Upcycled_Handcrafted_Origami_Deco_Storage_Small_BDSS1224-001.jpg?v=1735038777&width=1100",
+  "product_url": "https://www.recharkha.org/collections/basketry-deco-storage-small/products/yellow-black-upcycled-handcrafted-origami-deco-storage-small-bdss1224-001",
+  "variant_id": "46194043977984",
+  "quantity": 100,
+  "companyName": "reCharkha EcoSocial"
+},
+{
+  "_id": {
+    "$oid": "697918605a2f861d3b6c8844"
+  },
+  "name": "White Black Upcycled Handcrafted Origami Deco Storage Small (BDSS1224-006)",
+  "price": "Rs. 1,100",
+  "image_url": "https://www.recharkha.org/cdn/shop/files/White_Black_Upcycled_Handcrafted_Origami_Deco_Storage_Small_BDSS1224-006.jpg?v=1735038615&width=1100",
+  "product_url": "https://www.recharkha.org/collections/basketry-deco-storage-small/products/white-black-upcycled-handcrafted-origami-deco-storage-small-bdss1224-006",
+  "variant_id": "46194040930560",
+  "quantity": 100,
+  "companyName": "reCharkha EcoSocial"
 }]
