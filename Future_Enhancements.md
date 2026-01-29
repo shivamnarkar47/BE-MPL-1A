@@ -12,7 +12,7 @@
 - **Payment Gateway**: Integrate Razorpay/Stripe for checkout
 - **Order Tracking**: Real-time order status updates
 - **Order History**: User order history page
-- **Invoice Generation**: Downloadable invoices
+- ~~Invoice Generation~~: ~~Downloadable invoices~~ (DONE - PDF invoices with sustainability impact)
 
 ## 3. Marketplace Features
 
@@ -22,26 +22,11 @@
 - **Seller Profiles**: Multi-vendor support
 - **Product Categories**: Hierarchical categorization
 
-## 4. AI/ML Enhancements
-
-- **Custom Model**: Train model on upcycled products specific to your domain
-- **Bulk Analysis**: Process multiple images at once
-- **Recommendation Engine**: Suggest products based on user uploads
-- **Chatbot Integration**: AI chat for recycling queries
-
-## 5. User Experience
-
-- **Dark Mode**: Already have Tailwind, easy to add
-- **PWA**: Make it installable as an app
-- **Mobile Responsiveness**: Optimize for mobile
-- **Real-time Notifications**: WebSocket for order updates
-- **Loading States**: Skeleton screens for better UX
-
 ## 6. Donations & Social
 
 - **Donation Pickup**: Schedule doorstep pickup
 - **Coin/Reward System**: Gamify donations
-- **Impact Dashboard**: Show user's environmental impact
+- ~~Impact Dashboard~~: ~~Show user's environmental impact~~ (DONE - Eco-impact dashboard with CO2, water, waste tracking)
 - **Social Sharing**: Share contributions
 
 ## 7. Backend Improvements
@@ -69,13 +54,16 @@
 | High | Payment Gateway | High | High |
 | Medium | Search | Low | Medium |
 | Medium | Dark Mode | Low | Medium |
+| ~~Medium~~ | ~~Invoice Generation~~ | ~~Low~~ | ~~Medium~~ (DONE) |
+| ~~Medium~~ | ~~Impact Dashboard~~ | ~~Low~~ | ~~Medium~~ (DONE) |
 | Low | Docker | Medium | Low |
 | Low | Custom ML Model | High | Medium |
 
 ## Suggested Next Steps
 
 1. Implement JWT authentication (security foundation)
-2. Add basic search functionality (quick win)
-3. Integrate payment gateway (revenue enablement)
-4. Add dark mode (user satisfaction)
-5. Containerize with Docker (devops maturity)
+2. ~~Add invoice generation~~ (DONE)
+3. Add basic search functionality (quick win)
+4. Integrate payment gateway (revenue enablement)
+5. Add dark mode (user satisfaction)
+6. Containerize with Docker (devops maturity)
