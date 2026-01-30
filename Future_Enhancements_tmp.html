@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Future_Enhancements.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="future-enhancements-roadmap">Future Enhancements Roadmap</h1>
+<h2 id="recently-completed-%E2%9C%A8">Recently Completed ✨</h2>
+<h3 id="uiux-improvements">UI/UX Improvements</h3>
+<ul>
+<li><s><strong>Modern Tutorials Page</strong></s> - Redesigned with gradient backgrounds, stats section, and consistent styling (Jan 2026)</li>
+<li><s><strong>Enhanced Donation Hub</strong></s> - Complete UI overhaul with cart integration, environmental impact stats, and partner locator (Jan 2026)</li>
+<li><s><strong>AI Genius 2.0</strong></s> - Sleek redesign with drag-and-drop, multi-language support, history tracking, and tabbed results (Jan 2026)</li>
+</ul>
+<hr>
+<h2 id="1-authentication--security">1. Authentication &amp; Security</h2>
+<ul>
+<li><strong>JWT Tokens</strong>: Replace cookie-based auth with proper JWT, add token refresh</li>
+<li><strong>OAuth Login</strong>: Google/Facebook/GitHub login integration</li>
+<li><strong>Email Verification</strong>: Send verification emails on registration</li>
+<li><strong>Password Reset</strong>: Forgot password flow with secure tokens</li>
+<li><strong>2FA</strong>: Two-factor authentication for enhanced security</li>
+<li><strong>Session Management</strong>: Active session tracking and remote logout</li>
+</ul>
+<h2 id="2-payments--orders">2. Payments &amp; Orders</h2>
+<ul>
+<li><strong>Payment Gateway</strong>: Integrate Razorpay/Stripe for checkout</li>
+<li><strong>Order Tracking</strong>: Real-time order status updates with notifications</li>
+<li><strong>Order History</strong>: Comprehensive user order history with filters</li>
+<li><s>Invoice Generation</s>: <s>Downloadable invoices</s> ✅ (DONE - PDF invoices with sustainability impact)</li>
+<li><strong>Subscription Plans</strong>: Premium membership with benefits</li>
+<li><strong>Gift Cards</strong>: Digital gift card system</li>
+</ul>
+<h2 id="3-marketplace-features">3. Marketplace Features</h2>
+<ul>
+<li><strong>Advanced Search</strong>: Full-text search with filters (price, category, sustainability rating)</li>
+<li><strong>Search Suggestions</strong>: Auto-complete and trending searches</li>
+<li><s>Wishlist</s>: <s>Save products for later</s> ✅ (DONE - With add-to-cart integration)</li>
+<li><strong>Reviews/Ratings</strong>: Product reviews with photos and verified purchase badges</li>
+<li><strong>Q&amp;A Section</strong>: Community questions and answers on products</li>
+<li><strong>Seller Profiles</strong>: Multi-vendor support with ratings</li>
+<li><strong>Product Categories</strong>: Hierarchical categorization with breadcrumbs</li>
+<li><strong>Compare Products</strong>: Side-by-side product comparison</li>
+<li><strong>Recently Viewed</strong>: Track and display recently viewed items</li>
+<li><strong>Stock Alerts</strong>: Notify when out-of-stock items are available</li>
+</ul>
+<h2 id="4-ai--smart-features">4. AI &amp; Smart Features</h2>
+<ul>
+<li><strong>AI Recommendations</strong>: Personalized product recommendations</li>
+<li><strong>Visual Search</strong>: Search by uploading images</li>
+<li><s>AI Genius Enhancements</s>: <s>Object detection and upcycling suggestions</s> ✅ (DONE - With multi-language support)</li>
+<li><strong>Smart Sizing</strong>: AI-powered size recommendations</li>
+<li><strong>Sustainability Score</strong>: AI-calculated eco-ratings for products</li>
+<li><strong>Chatbot Assistant</strong>: 24/7 AI customer support</li>
+<li><strong>Trend Prediction</strong>: Predict upcoming sustainable fashion trends</li>
+</ul>
+<h2 id="5-sustainability-features">5. Sustainability Features</h2>
+<ul>
+<li><strong>Carbon Calculator</strong>: Track carbon footprint of purchases</li>
+<li><strong>Eco Challenges</strong>: Monthly sustainability challenges</li>
+<li><strong>Impact Leaderboard</strong>: Community sustainability rankings</li>
+<li><s>Impact Dashboard</s>: <s>Show user's environmental impact</s> ✅ (DONE - With CO2, water, waste tracking)</li>
+<li><strong>Green Shipping</strong>: Carbon-neutral delivery options</li>
+<li><strong>Repair Services</strong>: Connect users with repair workshops</li>
+<li><strong>Material Library</strong>: Educational database on sustainable materials</li>
+</ul>
+<h2 id="6-donations--social">6. Donations &amp; Social</h2>
+<ul>
+<li><strong>Donation Pickup</strong>: Schedule doorstep pickup (Coming Soon - Dialog added)</li>
+<li><s>Coin/Reward System</s>: <s>Gamify donations</s> ✅ (DONE - With tier system and badges)</li>
+<li><strong>Social Sharing</strong>: Share contributions on social media</li>
+<li><strong>Community Events</strong>: Local upcycling workshops and meetups</li>
+<li><strong>Donation Matching</strong>: Partner with brands to match donations</li>
+<li><strong>Impact Certificates</strong>: Downloadable certificates for donations</li>
+<li><strong>Referral Program</strong>: Earn coins by referring friends</li>
+</ul>
+<h2 id="7-user-experience">7. User Experience</h2>
+<ul>
+<li><strong>Dark Mode</strong>: Full dark theme support across all pages</li>
+<li><strong>Offline Support</strong>: PWA with offline browsing capability</li>
+<li><strong>Mobile Apps</strong>: Native iOS and Android applications</li>
+<li><strong>Accessibility</strong>: WCAG 2.1 AA compliance improvements</li>
+<li><strong>Keyboard Navigation</strong>: Full keyboard accessibility</li>
+<li><strong>Onboarding Flow</strong>: Interactive tutorial for new users</li>
+<li><strong>Personalization</strong>: User preference-based homepage</li>
+</ul>
+<h2 id="8-notifications--communication">8. Notifications &amp; Communication</h2>
+<ul>
+<li><strong>Push Notifications</strong>: Browser and mobile push notifications</li>
+<li><strong>Email Notifications</strong>: Order updates, promotions, newsletters</li>
+<li><strong>SMS Alerts</strong>: Critical order updates via SMS</li>
+<li><strong>In-App Messaging</strong>: Communication between buyers and sellers</li>
+<li><strong>Announcement System</strong>: Admin announcements and updates</li>
+</ul>
+<h2 id="9-analytics--insights">9. Analytics &amp; Insights</h2>
+<ul>
+<li><strong>User Analytics</strong>: Track user behavior and preferences</li>
+<li><strong>Sales Dashboard</strong>: Real-time sales analytics for admins</li>
+<li><strong>A/B Testing</strong>: Built-in experimentation framework</li>
+<li><strong>Heatmaps</strong>: Visual user interaction tracking</li>
+<li><strong>Conversion Funnels</strong>: Identify drop-off points</li>
+<li><strong>Sustainability Reports</strong>: Monthly impact reports for users</li>
+</ul>
+<h2 id="10-backend-improvements">10. Backend Improvements</h2>
+<ul>
+<li><strong>Admin Panel</strong>: Comprehensive product/user management UI</li>
+<li><strong>Caching</strong>: Redis for frequently accessed data</li>
+<li><strong>Rate Limiting</strong>: Prevent API abuse with intelligent limits</li>
+<li><strong>Logging &amp; Monitoring</strong>: Structured logging with ELK stack</li>
+<li><strong>API Versioning</strong>: For future compatibility</li>
+<li><strong>GraphQL</strong>: Migrate REST APIs to GraphQL</li>
+<li><strong>Webhooks</strong>: Event-driven architecture for integrations</li>
+<li><strong>Bulk Operations</strong>: CSV import/export for products and orders</li>
+</ul>
+<h2 id="11-devops--infrastructure">11. DevOps &amp; Infrastructure</h2>
+<ul>
+<li><strong>Docker</strong>: Containerize all services with docker-compose</li>
+<li><strong>CI/CD</strong>: GitHub Actions for testing and deployment</li>
+<li><strong>Cloud Deploy</strong>: AWS/GCP/Vercel with auto-scaling</li>
+<li><strong>Database Backups</strong>: Automated MongoDB backups with point-in-time recovery</li>
+<li><strong>CDN</strong>: Static asset delivery via CloudFront/Cloudflare</li>
+<li><strong>Monitoring</strong>: Prometheus + Grafana for system metrics</li>
+<li><strong>Error Tracking</strong>: Sentry integration for error monitoring</li>
+<li><strong>Performance</strong>: Lighthouse CI for performance budgets</li>
+</ul>
+<h2 id="12-internationalization">12. Internationalization</h2>
+<ul>
+<li><strong>Multi-Language</strong>: Support for 10+ languages</li>
+<li><strong>Currency Support</strong>: Multi-currency with real-time conversion</li>
+<li><strong>Regional Stores</strong>: Location-based product availability</li>
+<li><strong>International Shipping</strong>: Global shipping options</li>
+<li><strong>Tax Calculation</strong>: Automated tax calculation per region</li>
+</ul>
+<hr>
+<h2 id="priority-matrix">Priority Matrix</h2>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Feature</th>
+<th>Effort</th>
+<th>Impact</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>🔴 High</td>
+<td>JWT Auth</td>
+<td>Medium</td>
+<td>High</td>
+<td>🔄 In Progress</td>
+</tr>
+<tr>
+<td>🔴 High</td>
+<td>Payment Gateway</td>
+<td>High</td>
+<td>High</td>
+<td>📋 Planned</td>
+</tr>
+<tr>
+<td>🔴 High</td>
+<td>Advanced Search</td>
+<td>Medium</td>
+<td>High</td>
+<td>📋 Planned</td>
+</tr>
+<tr>
+<td>🟡 Medium</td>
+<td>Dark Mode</td>
+<td>Low</td>
+<td>Medium</td>
+<td>📋 Planned</td>
+</tr>
+<tr>
+<td>🟡 Medium</td>
+<td>Mobile Apps</td>
+<td>High</td>
+<td>High</td>
+<td>📋 Planned</td>
+</tr>
+<tr>
+<td>🟡 Medium</td>
+<td>Push Notifications</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>📋 Planned</td>
+</tr>
+<tr>
+<td>🟢 Low</td>
+<td>Docker</td>
+<td>Medium</td>
+<td>Low</td>
+<td>📋 Planned</td>
+</tr>
+<tr>
+<td>🟢 Low</td>
+<td>Custom ML Model</td>
+<td>High</td>
+<td>Medium</td>
+<td>🔬 Research</td>
+</tr>
+<tr>
+<td>✅ <s>Medium</s></td>
+<td><s>Invoice Generation</s></td>
+<td><s>Low</s></td>
+<td><s>Medium</s></td>
+<td>✅ DONE</td>
+</tr>
+<tr>
+<td>✅ <s>Medium</s></td>
+<td><s>Impact Dashboard</s></td>
+<td><s>Low</s></td>
+<td><s>Medium</s></td>
+<td>✅ DONE</td>
+</tr>
+<tr>
+<td>✅ <s>Medium</s></td>
+<td><s>Modern UI Components</s></td>
+<td><s>Medium</s></td>
+<td><s>High</s></td>
+<td>✅ DONE</td>
+</tr>
+<tr>
+<td>✅ <s>High</s></td>
+<td><s>Donation Cart Integration</s></td>
+<td><s>Medium</s></td>
+<td><s>High</s></td>
+<td>✅ DONE</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="q1-2026-goals">Q1 2026 Goals</h2>
+<h3 id="sprint-1-weeks-1-2">Sprint 1 (Weeks 1-2)</h3>
+<ol>
+<li>Implement JWT authentication</li>
+<li>Add password reset flow</li>
+<li>Email verification system</li>
+</ol>
+<h3 id="sprint-2-weeks-3-4">Sprint 2 (Weeks 3-4)</h3>
+<ol>
+<li>Advanced search with filters</li>
+<li>Product categorization</li>
+<li>Dark mode toggle</li>
+</ol>
+<h3 id="sprint-3-weeks-5-6">Sprint 3 (Weeks 5-6)</h3>
+<ol>
+<li>Razorpay integration</li>
+<li>Order tracking system</li>
+<li>Push notification setup</li>
+</ol>
+<h3 id="sprint-4-weeks-7-8">Sprint 4 (Weeks 7-8)</h3>
+<ol>
+<li>Admin panel improvements</li>
+<li>Analytics dashboard</li>
+<li>Performance optimization</li>
+</ol>
+<hr>
+<h2 id="suggested-next-steps">Suggested Next Steps</h2>
+<ol>
+<li><strong>Security First</strong>: Implement JWT authentication (foundation for all features)</li>
+<li><strong>Quick Win</strong>: Add advanced search functionality (high user value, low effort)</li>
+<li><strong>Revenue</strong>: Integrate payment gateway (enable transactions)</li>
+<li><strong>UX</strong>: Implement dark mode (highly requested feature)</li>
+<li><strong>Scale</strong>: Containerize with Docker (prepare for growth)</li>
+<li><strong>Mobile</strong>: Begin React Native app development</li>
+</ol>
+<hr>
+<h2 id="notes">Notes</h2>
+<ul>
+<li>All features should maintain sustainability focus</li>
+<li>Prioritize accessibility (WCAG 2.1 AA) in all new features</li>
+<li>Mobile-first design approach for all UI updates</li>
+<li>Regular security audits for authentication features</li>
+<li>A/B test major UI changes before full rollout</li>
+<li>Document API changes for third-party integrations</li>
+</ul>
+
+</body>
+</html>

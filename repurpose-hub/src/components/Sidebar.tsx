@@ -2,7 +2,6 @@ import { getCookie } from '@/lib/getUser';
 import { useState } from 'react';
 import { Button } from './ui/button';
 import {
-  BookX,
   Brain,
   ChevronLeft,
   ChevronRight,
