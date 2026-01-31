@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -76,20 +76,30 @@ export default function CartPage() {
   const [removingItems, setRemovingItems] = useState<Set<string>>(new Set());
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const { user, loading: authLoading } = useAuth();
+  const isFetchingRef = useRef(false);
 
   const fetchCart = useCallback(async (showLoading = false) => {
+    if (isFetchingRef.current) return;
+    isFetchingRef.current = true;
+    
     if (showLoading) setIsRefreshing(true);
     else if (isLoading) setIsLoading(true);
     setError(null);
 
     try {
+      if (!user?.id) {
+        isFetchingRef.current = false;
+        return;
+      }
+      
       const response = await requestUrl({
         method: "GET",
-        endpoint: `cart/${user?.id}`,
+        endpoint: `cart/${user.id}`,
       });
 
       if (!response.data || response.data.length === 0) {
         setCartItems([]);
+        isFetchingRef.current = false;
         return;
       }
 
@@ -108,14 +118,17 @@ export default function CartPage() {
     } finally {
       setIsRefreshing(false);
       setIsLoading(false);
+      isFetchingRef.current = false;
     }
   }, [user?.id, isLoading]);
 
   const fetchOrders = useCallback(async () => {
+    if (!user?.id) return;
+    
     try {
       const response = await requestUrl({
         method: "GET",
-        endpoint: `orders/${user?.id}`,
+        endpoint: `orders/${user.id}`,
       });
       setPastOrders(response.data || []);
     } catch (error) {
@@ -124,13 +137,13 @@ export default function CartPage() {
   }, [user?.id]);
 
   useEffect(() => {
-    if (user?.id) {
+    if (user?.id && !isFetchingRef.current) {
       fetchCart();
       fetchOrders();
-    } else {
+    } else if (!user?.id) {
       setIsLoading(false);
     }
-  }, [user?.id, fetchCart, fetchOrders]);
+  }, [user?.id]);
 
   const handleDownloadInvoice = async (orderId: string) => {
     try {
@@ -154,14 +167,17 @@ export default function CartPage() {
   };
 
   useEffect(() => {
-    if (!isPaymentDialogOpen) {
-      const timer = setTimeout(() => {
+    let timer: NodeJS.Timeout;
+    if (!isPaymentDialogOpen && user?.id) {
+      timer = setTimeout(() => {
         fetchCart();
         fetchOrders();
       }, 1000);
-      return () => clearTimeout(timer);
     }
-  }, [isPaymentDialogOpen]);
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [isPaymentDialogOpen, user?.id]);
 
   function calculateCartTotal(items: CartItem[]): number {
     if (!items || items.length === 0) return 0;

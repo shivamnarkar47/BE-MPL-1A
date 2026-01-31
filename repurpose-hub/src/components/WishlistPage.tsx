@@ -76,6 +76,56 @@ export default function WishlistPage() {
     }
   };
 
+  const addAllToCart = async () => {
+    if (!user?.id) {
+      setError("Please log in to add items to cart");
+      return;
+    }
+
+    setIsLoading(true);
+    setError(null);
+
+    const itemsToAdd = [...wishlist]; // Copy the wishlist to avoid mutation during iteration
+
+    try {
+      // Process all items in parallel
+      await Promise.all(
+        itemsToAdd.map(async (product) => {
+          const productId = product.id || product._id || '';
+          
+          try {
+            await requestUrl({
+              method: "POST",
+              endpoint: "cart/add",
+              data: {
+                user_id: user.id,
+                items: [{
+                  id: productId,
+                  name: product.name,
+                  price: product.price,
+                  quantity: 1,
+                  companyname: product.companyname || product.companyName,
+                  imageurl: product.imageurl,
+                  stock: product.stock || 100
+                }]
+              }
+            });
+
+            // Remove from wishlist after adding to cart
+            removeFromWishlist(productId);
+          } catch (error) {
+            console.error(`Error adding ${product.name} to cart:`, error);
+          }
+        })
+      );
+    } catch (error) {
+      console.error("Error adding items to cart:", error);
+      setError("Some items failed to add to cart. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const removeFromWishlistWithLoading = (productId: string) => {
     setRemovingItems(prev => new Set(prev).add(productId));
     removeFromWishlist(productId);
@@ -340,13 +390,21 @@ export default function WishlistPage() {
                   </div>
                 </div>
                 <Button
-                  onClick={() => {
-                    // Add all items to cart
-                    wishlist.forEach(product => addToCart(product));
-                  }}
+                  onClick={addAllToCart}
+                  disabled={isLoading}
                   className="bg-pink-500 hover:bg-pink-600"
                 >
-                  Add All to Cart
+                  {isLoading ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      Adding All...
+                    </>
+                  ) : (
+                    <>
+                      <ShoppingCart className="w-4 h-4 mr-2" />
+                      Add All to Cart
+                    </>
+                  )}
                 </Button>
               </div>
             </CardContent>

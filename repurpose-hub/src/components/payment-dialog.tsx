@@ -49,10 +49,7 @@ interface RazorpayInstance {
 interface PaymentDialogProps {
   isOpen: boolean;
   onClose: () => void;
-  totalAmount: number;
-  email: string;
-  phone?: string;
-  name?: string;
+  total: number;
 }
 
 interface PendingCheckout {
@@ -80,34 +77,6 @@ export function PaymentDialog({ isOpen, onClose, total }: PaymentDialogProps) {
     return `${user?.id}-${Date.now()}-${Math.random().toString(36).substring(2, 11)}`;
   }, [user?.id]);
 
-  // Check for pending checkout on mount
-  useEffect(() => {
-    if (isOpen) {
-      const pending = sessionStorage.getItem("pendingCheckout");
-      if (pending) {
-        try {
-          const parsed: PendingCheckout = JSON.parse(pending);
-          // Check if less than 30 minutes old
-          if (Date.now() - parsed.createdAt < 30 * 60 * 1000) {
-            const proceed = window.confirm(
-              "You have a pending payment. Would you like to continue where you left off?"
-            );
-            if (proceed) {
-              setIsProcessing(true);
-              handleContinuePayment(parsed);
-            } else {
-              sessionStorage.removeItem("pendingCheckout");
-            }
-          } else {
-            sessionStorage.removeItem("pendingCheckout");
-          }
-        } catch {
-          sessionStorage.removeItem("pendingCheckout");
-        }
-      }
-    }
-  }, [isOpen, handleContinuePayment]);
-
   const loadRazorpayScript = useCallback(() => {
     return new Promise<boolean>((resolve) => {
       if ((window as RazorpayWindow).Razorpay) {
@@ -129,104 +98,6 @@ export function PaymentDialog({ isOpen, onClose, total }: PaymentDialogProps) {
       document.body.appendChild(script);
     });
   }, []);
-
-  useEffect(() => {
-    if (isOpen && !scriptLoaded && !scriptLoading) {
-      loadRazorpayScript();
-    }
-  }, [isOpen, scriptLoaded, scriptLoading, loadRazorpayScript]);
-
-  // Countdown timer for success dialog
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-
-    if (showSuccessDialog && countdown > 0) {
-      timer = setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000);
-    } else if (showSuccessDialog && countdown === 0) {
-      handleNavigation();
-    }
-
-    return () => {
-      if (timer) clearTimeout(timer);
-    };
-  }, [showSuccessDialog, countdown, handleNavigation]);
-
-  const handleNavigation = useCallback(() => {
-    setShowSuccessDialog(false);
-    setIsPaymentSuccessful(false);
-    onClose();
-    sessionStorage.removeItem("pendingCheckout");
-    navigate("/home");
-  }, [onClose, navigate]);
-
-  const handleContinuePayment = useCallback(async (pending: PendingCheckout) => {
-    if (!scriptLoaded && !scriptLoading) {
-      const loaded = await loadRazorpayScript();
-      if (!loaded) {
-        setErrorType("server");
-        setErrorMessage("Failed to load payment gateway. Please refresh and try again.");
-        setIsProcessing(false);
-        return;
-      }
-    }
-
-    try {
-      // Resume Razorpay order creation
-      const orderResponse = await requestUrl({
-        method: "POST",
-        endpoint: "payment/create-order",
-        data: {
-          amount: pending.total,
-          currency: "INR",
-          user_id: user.id,
-        },
-      });
-
-      const razorpayOrderId = orderResponse.data.orderId;
-
-      const options: RazorpayOptions = {
-        key: "rzp_test_RZmsXRdoSG9Eu4",
-        amount: Math.round(pending.total * 100),
-        currency: "INR",
-        name: "RepurposeHub",
-        description: "Eco-friendly Products Purchase",
-        order_id: razorpayOrderId,
-        handler: function (response: RazorpayResponse) {
-          completePayment(
-            response.razorpay_order_id,
-            response.razorpay_payment_id,
-            response.razorpay_signature,
-            pending.checkoutId,
-          );
-        },
-        prefill: {
-          name: user.full_name || "Customer",
-          email: user.email || "customer@example.com",
-          contact: user.phone || "+919876543210",
-        },
-        theme: {
-          color: "#10B981",
-        },
-      };
-
-      const rzp1 = new (window as RazorpayWindow).Razorpay(options);
-      rzp1.on("payment.failed", function (response: { error: { description: string } }) {
-        setErrorType("razorpay");
-        setErrorMessage(response.error.description || "Payment failed. Please try again.");
-        setIsProcessing(false);
-      });
-      rzp1.open();
-    } catch (error: unknown) {
-      const errorMessage = error && typeof error === 'object' && 'response' in error 
-        ? (error as { response?: { data?: { detail?: string } } }).response?.data?.detail 
-        : "Payment initialization failed. Please try again.";
-      setErrorType("server");
-      setErrorMessage(errorMessage);
-      setIsProcessing(false);
-    }
-  }, [scriptLoaded, scriptLoading, loadRazorpayScript, user]);
 
   const completePayment = async (
     razorpayOrderId: string,
@@ -275,11 +146,136 @@ export function PaymentDialog({ isOpen, onClose, total }: PaymentDialogProps) {
     }
   };
 
+  const handleContinuePayment = useCallback(async (pending: PendingCheckout) => {
+    if (!scriptLoaded && !scriptLoading) {
+      const loaded = await loadRazorpayScript();
+      if (!loaded) {
+        setErrorType("server");
+        setErrorMessage("Failed to load payment gateway. Please refresh and try again.");
+        setIsProcessing(false);
+        return;
+      }
+    }
+
+    try {
+      // Resume Razorpay order creation
+      const orderResponse = await requestUrl({
+        method: "POST",
+        endpoint: "payment/create-order",
+        data: {
+          amount: pending.total,
+          currency: "INR",
+          user_id: user?.id,
+        },
+      });
+
+      const razorpayOrderId = orderResponse.data.orderId;
+
+      const options: RazorpayOptions = {
+        key: "rzp_test_RZmsXRdoSG9Eu4",
+        amount: Math.round(pending.total * 100),
+        currency: "INR",
+        name: "RepurposeHub",
+        description: "Eco-friendly Products Purchase",
+        order_id: razorpayOrderId,
+        handler: function (response: RazorpayResponse) {
+          completePayment(
+            response.razorpay_order_id,
+            response.razorpay_payment_id,
+            response.razorpay_signature,
+            pending.checkoutId,
+          );
+        },
+        prefill: {
+          name: user?.full_name || "Customer",
+          email: user?.email || "customer@example.com",
+          contact: user?.phone || "+919876543210",
+        },
+        theme: {
+          color: "#10B981",
+        },
+      };
+
+      const rzp1 = new (window as RazorpayWindow).Razorpay(options);
+      rzp1.on("payment.failed", function (response: { error: { description: string } }) {
+        setErrorType("razorpay");
+        setErrorMessage(response.error.description || "Payment failed. Please try again.");
+        setIsProcessing(false);
+      });
+      rzp1.open();
+    } catch (error: unknown) {
+      const errorMessage = error && typeof error === 'object' && 'response' in error 
+        ? (error as { response?: { data?: { detail?: string } } }).response?.data?.detail 
+        : "Payment initialization failed. Please try again.";
+      setErrorType("server");
+      setErrorMessage(errorMessage);
+      setIsProcessing(false);
+    }
+  }, [scriptLoaded, scriptLoading, loadRazorpayScript, user]);
+
+  const handleNavigation = useCallback(() => {
+    setShowSuccessDialog(false);
+    setIsPaymentSuccessful(false);
+    onClose();
+    sessionStorage.removeItem("pendingCheckout");
+    navigate("/home");
+  }, [onClose, navigate]);
+
+  // Check for pending checkout on mount
+  useEffect(() => {
+    if (isOpen) {
+      const pending = sessionStorage.getItem("pendingCheckout");
+      if (pending) {
+        try {
+          const parsed: PendingCheckout = JSON.parse(pending);
+          // Check if less than 30 minutes old
+          if (Date.now() - parsed.createdAt < 30 * 60 * 1000) {
+            const proceed = window.confirm(
+              "You have a pending payment. Would you like to continue where you left off?"
+            );
+            if (proceed) {
+              setIsProcessing(true);
+              handleContinuePayment(parsed);
+            } else {
+              sessionStorage.removeItem("pendingCheckout");
+            }
+          } else {
+            sessionStorage.removeItem("pendingCheckout");
+          }
+        } catch {
+          sessionStorage.removeItem("pendingCheckout");
+        }
+      }
+    }
+  }, [isOpen, handleContinuePayment]);
+
+  useEffect(() => {
+    if (isOpen && !scriptLoaded && !scriptLoading) {
+      loadRazorpayScript();
+    }
+  }, [isOpen, scriptLoaded, scriptLoading, loadRazorpayScript]);
+
+  // Countdown timer for success dialog
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+
+    if (showSuccessDialog && countdown > 0) {
+      timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+    } else if (showSuccessDialog && countdown === 0) {
+      handleNavigation();
+    }
+
+    return () => {
+      if (timer) clearTimeout(timer);
+    };
+  }, [showSuccessDialog, countdown, handleNavigation]);
+
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorType("none");
     setErrorMessage("");
-    setRetryCount(prev => prev + 1);
 
     if (!scriptLoaded && !scriptLoading) {
       const loaded = await loadRazorpayScript();

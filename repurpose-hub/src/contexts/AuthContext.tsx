@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { getCookie, deleteCookie, setAuthCookies, getAccessToken } from '@/lib/getUser';
 import { requestUrl } from '@/lib/requestUrl';
 
@@ -23,35 +23,46 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [mounted, setMounted] = useState(false);
 
-  const refreshUser = () => {
+  // Memoize the refresh logic to avoid re-renders
+  const checkAuthStatus = useCallback(() => {
     const cookieUser = getCookie();
     const token = getAccessToken();
-    if (cookieUser && token) {
-      setUser(cookieUser);
-    } else {
-      setUser(null);
-    }
-    setLoading(false);
-  };
+    const isAuthenticated = !!(cookieUser && token);
+    
+    setUser(prev => {
+      // Only update if auth status actually changed
+      const prevEmail = prev?.email;
+      const currentEmail = cookieUser?.email;
+      if (prevEmail !== currentEmail) {
+        return cookieUser;
+      }
+      return prev;
+    });
+  }, []);
 
   useEffect(() => {
-    refreshUser();
+    setMounted(true);
+    
+    // Initial auth check
+    checkAuthStatus();
+    setLoading(false);
 
-    const interval = setInterval(() => {
-      const token = getAccessToken();
-      if (token) {
-        refreshUser();
-      }
-    }, 60000);
+    // Set up periodic token check
+    const interval = setInterval(checkAuthStatus, 60000);
+    
+    // Handle window focus
+    const handleFocus = () => checkAuthStatus();
 
-    window.addEventListener('focus', refreshUser);
+    window.addEventListener('focus', handleFocus);
 
     return () => {
       clearInterval(interval);
-      window.removeEventListener('focus', refreshUser);
+      window.removeEventListener('focus', handleFocus);
+      setMounted(false);
     };
-  }, []);
+  }, [checkAuthStatus]);
 
   const login = async (email: string, password: string) => {
     const response = await requestUrl({
@@ -82,7 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, refreshUser }}>
+    <AuthContext.Provider value={{ user, loading, login, register, logout, refreshUser: checkAuthStatus }}>
       {children}
     </AuthContext.Provider>
   );

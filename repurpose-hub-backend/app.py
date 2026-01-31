@@ -38,6 +38,12 @@ from typing import Optional
 
 app = FastAPI()
 
+# Import admin routes
+from admin_routes import router as admin_router
+
+# Include admin routes
+app.include_router(admin_router)
+
 # JWT Configuration
 SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-super-secret-key-change-in-production")
 ALGORITHM = "HS256"
