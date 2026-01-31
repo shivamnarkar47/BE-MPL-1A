@@ -1,17 +1,18 @@
-import { getCookie } from '@/lib/getUser'
+import { useAuth } from '@/contexts/AuthContext'
 import { Navigate, Outlet } from 'react-router-dom'
+
 const ProtectedRoute = () => {
-  const user = getCookie();
-  console.log(user)
-  if (user != null) {
-    return (
-      <Outlet />
-    )
-  }
-  else {
-    <Navigate to="/" replace={true}  />
+  const { user, loading } = useAuth();
+
+  if (loading) {
+    return null;
   }
 
+  if (user != null) {
+    return <Outlet />
+  }
+
+  return <Navigate to="/" replace={true} />
 }
 
 export default ProtectedRoute

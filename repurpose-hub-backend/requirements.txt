@@ -7,3 +7,5 @@ passlib
 argon2-cffi
 fpdf
 fpdf2
+python-jose[cryptography]
+PyJWT

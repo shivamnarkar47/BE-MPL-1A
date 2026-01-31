@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,7 +6,6 @@ import {
 } from "@/components/ui/card";
 import { PaymentDialog } from "./payment-dialog";
 import { requestUrl } from "@/lib/requestUrl";
-import { user } from "@/lib/getUser";
 import { ScrollArea } from "./ui/scroll-area";
 import {
   RefreshCw,
@@ -30,6 +29,7 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface CartItem {
   id: string;
@@ -75,8 +75,9 @@ export default function CartPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [removingItems, setRemovingItems] = useState<Set<string>>(new Set());
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const { user, loading: authLoading } = useAuth();
 
-  const fetchCart = async (showLoading = false) => {
+  const fetchCart = useCallback(async (showLoading = false) => {
     if (showLoading) setIsRefreshing(true);
     else if (isLoading) setIsLoading(true);
     setError(null);
@@ -108,9 +109,9 @@ export default function CartPage() {
       setIsRefreshing(false);
       setIsLoading(false);
     }
-  };
+  }, [user?.id, isLoading]);
 
-  const fetchOrders = async () => {
+  const fetchOrders = useCallback(async () => {
     try {
       const response = await requestUrl({
         method: "GET",
@@ -120,7 +121,7 @@ export default function CartPage() {
     } catch (error) {
       console.error("Error fetching orders:", error);
     }
-  };
+  }, [user?.id]);
 
   useEffect(() => {
     if (user?.id) {
@@ -129,7 +130,7 @@ export default function CartPage() {
     } else {
       setIsLoading(false);
     }
-  }, [user?.id]);
+  }, [user?.id, fetchCart, fetchOrders]);
 
   const handleDownloadInvoice = async (orderId: string) => {
     try {
@@ -251,7 +252,7 @@ export default function CartPage() {
     );
   }
 
-  if (isLoading) {
+  if (authLoading || isLoading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">

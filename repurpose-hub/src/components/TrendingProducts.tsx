@@ -6,8 +6,19 @@ import { Link } from "react-router-dom";
 import { TrendingUp, Star, ArrowRight } from "lucide-react";
 import WishlistButton from "./WishlistButton";
 
+interface Product {
+  id?: string;
+  _id?: string;
+  name: string;
+  price: string;
+  quantity: number;
+  imageurl?: string;
+  description?: string;
+  companyname?: string;
+}
+
 const TrendingProducts = () => {
-  const [trendingProducts, setTrendingProducts] = useState([]);
+  const [trendingProducts, setTrendingProducts] = useState<Product[]>([]);
 
   useEffect(() => {
     requestUrl({
@@ -18,8 +29,8 @@ const TrendingProducts = () => {
         // Get trending products (those with higher quantity and sort by price)
         const products = response.data;
         const trending = products
-          .filter((product: any) => product.quantity > 50) // Products with good stock
-          .sort((a: any, b: any) => {
+          .filter((product: Product) => product.quantity > 50) // Products with good stock
+          .sort((a: Product, b: Product) => {
             // Sort by a combination of stock and price (higher priced items might be more popular)
             const parsePrice = (p: string) => parseFloat(p.replace(/^Rs\.\s*/, "").replace(/,/g, "").trim()) || 0;
             const scoreA = (a.quantity || 0) + parsePrice(a.price) / 100;
@@ -53,7 +64,7 @@ const TrendingProducts = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {trendingProducts.map((product: any) => (
+          {trendingProducts.map((product: Product) => (
             <Link key={product.id || product._id} to={`/product/${product.id || product._id}`}>
               <Card className="hover:shadow-xl transition-all duration-300 cursor-pointer group border-0 shadow-md">
                 <CardHeader className="p-0">

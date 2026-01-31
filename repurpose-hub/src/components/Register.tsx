@@ -1,26 +1,26 @@
-import { requestUrl } from '@/lib/requestUrl'
-import Cookies from 'js-cookie';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 
 const Register = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
+  const { register: registerUser } = useAuth();
 
 
-  const formSubmit = async (data: any) => {
+  const formSubmit = async (data: {
+    email: string;
+    password: string;
+    full_name?: string;
+    phone?: string;
+  }) => {
     console.log(data)
-    await requestUrl({
-      method: "POST",
-      data: data,
-      endpoint: "createUser"
-    }).then((res) => {
-      console.log(res.data)
-      Cookies.set('user', JSON.stringify(res.data), { expires: 3, secure: true, sameSite: 'Strict' });
+    try {
+      await registerUser(data);
       navigate("/home")
-    }).catch((e) => {
+    } catch (e) {
       console.error(e);
-    })
+    }
   }
   
   console.log(errors)

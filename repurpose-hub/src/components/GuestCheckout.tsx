@@ -76,7 +76,7 @@ export default function GuestCheckout({ onBack, onComplete }: GuestCheckoutProps
       clearGuestCart();
       onComplete?.();
       navigate("/order-confirmation");
-    } catch (err) {
+    } catch {
       setError("Payment failed. Please try again.");
     } finally {
       setIsProcessing(false);

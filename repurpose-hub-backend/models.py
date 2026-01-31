@@ -68,6 +68,7 @@ class Wishlist(BaseModel):
 class Checkout(BaseModel):
     user_id: str
     total_payment: float
+    idempotency_key: Optional[str] = None
 
 
 # Donation Models

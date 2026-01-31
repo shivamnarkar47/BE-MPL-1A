@@ -56,7 +56,7 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
           
           if (response.data && response.data.length > 0) {
             // Flatten items from all wishlist documents
-            const allItems = response.data.flatMap((w: any) => w.items || []);
+            const allItems = response.data.flatMap((w: { items: Product[] }) => w.items || []);
             setWishlist(allItems);
           } else {
             setWishlist([]);
@@ -120,7 +120,7 @@ export const WishlistProvider: React.FC<WishlistProviderProps> = ({ children }) 
       // Save to localStorage for guests
       localStorage.setItem('wishlist', JSON.stringify(wishlist));
     }
-  }, [wishlist, user?.id, isLoading]);
+  }, [wishlist, isLoading]);
 
   const addToWishlist = (product: Product) => {
     setWishlist(prevWishlist => {

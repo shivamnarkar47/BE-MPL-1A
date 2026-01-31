@@ -1,15 +1,17 @@
 import { deleteCookie } from "@/lib/getUser"
 import { Button } from "./ui/button"
 import { useNavigate } from "react-router-dom"
+import { useAuth } from "@/contexts/AuthContext"
 
 const Logout = () => {
   const navigate = useNavigate();
+  const { logout: authLogout } = useAuth();
+
   const handleLogout = () => {
     deleteCookie();
-    location.reload()
-    location.href="/"
+    authLogout();
   }
-  
+
 
   return (
     <div className="mx-auto flex-col gap-y-9 min-h-[90vh] flex items-center justify-center ">

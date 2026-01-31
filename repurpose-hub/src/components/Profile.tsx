@@ -8,13 +8,22 @@ import { Package, User, MapPin, Settings, ExternalLink, Leaf, Sparkles } from "l
 import { getCookie } from "@/lib/getUser";
 import { Link } from "react-router-dom";
 
+interface OrderItem {
+    id: string;
+    name: string;
+    price: string;
+    quantity: number;
+    imageurl?: string;
+}
+
 interface Order {
     id: string;
-    _id: string;
-    total_price: number;
-    status: string;
+    user_id: string;
+    total_amount: number;
+    order_status: string;
+    payment_status: string;
     created_at: string;
-    items: any[];
+    items: OrderItem[];
 }
 
 const Profile = () => {

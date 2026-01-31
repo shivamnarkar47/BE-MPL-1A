@@ -45,7 +45,7 @@ export default function ProductPage() {
         endpoint: `cart/${user.id}`,
       }).then((res) => {
         const cartItems = res.data[0]?.items || [];
-        const item = cartItems.find((i: any) => i.id === productId);
+        const item = cartItems.find((i: { id: string; quantity: number }) => i.id === productId);
         if (item) {
           setCartQuantity(item.quantity);
         }

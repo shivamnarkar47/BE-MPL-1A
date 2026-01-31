@@ -20,6 +20,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import axios from "axios";
+
+interface HistoryItem {
+  id: string;
+  question: string;
+  answer: string;
+  type: "text" | "image";
+  image?: string;
+  timestamp: Date;
+  features?: string[];
+}
 import {
   Camera,
   Upload,
@@ -108,7 +118,7 @@ const AIGenius = () => {
     if (savedHistory) {
       try {
         const parsed = JSON.parse(savedHistory);
-        setHistory(parsed.map((h: any) => ({ ...h, timestamp: new Date(h.timestamp) })));
+        setHistory(parsed.map((h: HistoryItem) => ({ ...h, timestamp: new Date(h.timestamp) })));
       } catch (e) {
         console.error("Error loading history:", e);
       }
@@ -272,11 +282,12 @@ const AIGenius = () => {
         audio.volume = 0.7;
         audio.play().catch((err) => console.warn("Autoplay failed:", err));
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error:", error);
-      if (error.code === "ECONNABORTED") {
+      const axiosError = error as any;
+      if (axiosError?.code === "ECONNABORTED") {
         setError("Analysis timed out. Please try again.");
-      } else if (error.response?.status === 413) {
+      } else if (axiosError?.response?.status === 413) {
         setError("Image too large. Please use a smaller image.");
       } else {
         setError("Error processing image. Please check your connection and try again.");

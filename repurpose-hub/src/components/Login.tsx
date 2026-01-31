@@ -1,26 +1,20 @@
 
-import { requestUrl } from '@/lib/requestUrl';
-import Cookies from 'js-cookie'
-
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: { email: string; password: string }) => {
     console.log("Data:", data)
-    await requestUrl({
-      method: "POST",
-      endpoint: "login",
-      data: data
-    }).then((res) => {
-      console.log(res.data);
-      Cookies.set('user', JSON.stringify(res.data), { expires: 3, secure: true, sameSite: 'Strict' });
+    try {
+      await login(data.email, data.password);
       navigate("/home")
-    }).catch((e) => {
+    } catch (e) {
       console.log(e)
-    })
+    }
   }
   console.log(errors);
 

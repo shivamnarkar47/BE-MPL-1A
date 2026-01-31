@@ -30,11 +30,6 @@ const AdminDashboard = () => {
     const [loading, setLoading] = useState(true);
     const [searchQuery, setSearchQuery] = useState("");
 
-    // Check if user is admin
-    if (!user || user.role !== "admin") {
-        return <Navigate to="/home" replace />;
-    }
-
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -53,6 +48,11 @@ const AdminDashboard = () => {
 
         fetchData();
     }, []);
+
+    // Check if user is admin
+    if (!user || user.role !== "admin") {
+        return <Navigate to="/home" replace />;
+    }
 
     const filteredProducts = products.filter(p =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||

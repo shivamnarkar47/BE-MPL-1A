@@ -133,8 +133,8 @@
 
 | Priority | Feature | Effort | Impact | Status |
 |----------|---------|--------|--------|--------|
-| 🔴 High | JWT Auth | Medium | High | 🔄 In Progress |
-| 🔴 High | Payment Gateway | High | High | 📋 Planned |
+| 🔴 High | JWT Auth | Medium | High | ✅ DONE (JWT + Refresh Token) |
+| 🔴 High | Payment Gateway | High | High | ✅ DONE (Razorpay + Invoice PDF) |
 | 🔴 High | Advanced Search | Medium | High | 📋 Planned |
 | 🟡 Medium | Dark Mode | Low | Medium | 📋 Planned |
 | 🟡 Medium | Mobile Apps | High | High | 📋 Planned |
