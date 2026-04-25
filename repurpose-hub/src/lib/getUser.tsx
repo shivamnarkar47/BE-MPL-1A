@@ -1,5 +1,7 @@
 import Cookies from "js-cookie";
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/";
+
 export const getCookie = () => {
   const cookie = Cookies.get("user");
   return cookie ? JSON.parse(cookie) : null;
@@ -30,7 +32,7 @@ export const refreshAccessToken = async (): Promise<boolean> => {
   if (!refreshToken) return false;
 
   try {
-    const response = await fetch("http://localhost:8000/refresh-token", {
+    const response = await fetch(`${API_BASE_URL}refresh-token`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ refresh_token: refreshToken }),
@@ -48,5 +50,14 @@ export const refreshAccessToken = async (): Promise<boolean> => {
     return false;
   }
 };
+
+// Auth state helpers
+export const isAuthenticated = () => {
+  const cookieUser = getCookie();
+  const token = getAccessToken();
+  return !!(cookieUser && token);
+};
+
+export const getCurrentUser = () => getCookie();
 
 export const user = getCookie();

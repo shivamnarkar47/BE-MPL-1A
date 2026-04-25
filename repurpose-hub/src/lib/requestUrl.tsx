@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios"
 import { getAccessToken, refreshAccessToken } from "./getUser"
 
-const baseURL = "http://localhost:8000/";
+const baseURL = import.meta.env.VITE_API_URL || "http://localhost:8000/";
 
 type DataProps = {
   method: "GET" | "POST" | "PUT" | "PATCH" | "DELETE"

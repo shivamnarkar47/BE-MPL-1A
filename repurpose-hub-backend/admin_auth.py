@@ -13,10 +13,10 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from models import User
 
-security = HTTPBearer()
+from config import SECRET_KEY, ALGORITHM
+from helpers import to_model
 
-SECRET_KEY = "your-secret-key-here"  # Move to environment variables
-ALGORITHM = "HS256"
+security = HTTPBearer()
 
 
 async def get_current_user(
@@ -39,20 +39,16 @@ async def get_current_user(
     except JWTError:
         raise credentials_exception
 
-    # Import database connection here to avoid circular imports
-    from app import user_collection
+    # Import database connection from db.py
+    from db import user_collection
 
     user_data = await user_collection.find_one({"_id": ObjectId(user_id)})
 
     if user_data is None:
         raise credentials_exception
 
-    # Convert MongoDB _id to id for User model
-    if "_id" in user_data:
-        user_data["id"] = str(user_data["_id"])
-        del user_data["_id"]
-
-    return User(**user_data)
+    # Convert MongoDB document to User model using helper
+    return to_model(user_data, User)
 
 
 async def get_current_admin_user(

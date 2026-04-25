@@ -1,7 +1,6 @@
 from typing import List
 from fastapi import FastAPI, HTTPException, Depends, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from motor.motor_asyncio import AsyncIOMotorClient
 from bson import ObjectId
 from models import (
     Cart,
@@ -27,7 +26,6 @@ import razorpay
 import os
 import hmac
 import hashlib
-from passlib.context import CryptContext
 from fpdf import FPDF
 from fastapi.responses import Response
 import io
@@ -35,6 +33,25 @@ import re
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from typing import Optional
+
+# Import shared config and db
+from config import (
+    SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES,
+    REFRESH_TOKEN_EXPIRE_DAYS, RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET, CORS_ORIGINS
+)
+from db import (
+    db, user_collection, product_collection, tutorials_collection,
+    donations_collection, cart_collection, checkout_collection,
+    orders_collection, wishlist_collection, eco_impact_collection,
+    style_preferences_collection, idempotency_collection
+)
+from services import (
+    calculate_cart_total as svc_calculate_cart_total,
+    validate_cart_amount as svc_validate_cart_amount,
+    get_razorpay_client, create_order as svc_create_order,
+    verify_payment_signature, get_payment_status as svc_get_payment_status,
+    calculate_total_impact, complete_checkout as svc_complete_checkout,
+)
 
 app = FastAPI()
 
@@ -44,45 +61,17 @@ from admin_routes import router as admin_router
 # Include admin routes
 app.include_router(admin_router)
 
-# JWT Configuration
-SECRET_KEY = os.getenv("JWT_SECRET_KEY", "your-super-secret-key-change-in-production")
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 24 hours
-REFRESH_TOKEN_EXPIRE_DAYS = 7
-
-# Razorpay Configuration
-RAZORPAY_KEY_ID = os.getenv("RAZORPAY_KEY_ID", "rzp_test_RZmsXRdoSG9Eu4")
-RAZORPAY_KEY_SECRET = os.getenv("RAZORPAY_KEY_SECRET", "L2ogP0mVvA0wSAGdweRJlupr")
-
 # Initialize Razorpay client
 razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 razorpay_client.set_app_details({"title": "FastAPI App", "version": "1.0"})
 
-# CORS configuration
-origins = ["http://localhost:5173", "http://127.0.0.1:5173"]
-
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-# MongoDB connection
-mongo_client = AsyncIOMotorClient("mongodb://localhost:27017")
-db = mongo_client["repurpose-hub"]
-user_collection = db.users
-product_collection = db.products
-tutorials_collection = db.tutorials
-donations_collection = db.donations
-cart_collection = db.cart
-checkout_collection = db.checkout
-orders_collection = db.orders
-wishlist_collection = db.wishlist
-eco_impact_collection = db.eco_impact
-style_preferences_collection = db.style_preferences
-idempotency_collection = db.idempotency  # For payment idempotency
 
 
 # Helper functions
@@ -205,50 +194,18 @@ async def store_idempotency_result(key: str, result: dict):
 async def validate_cart_amount(
     user_id: str, expected_total: float
 ) -> tuple[bool, float]:
-    """
-    Validate cart amount against requested total.
-    Returns (is_valid, calculated_total)
-    Allow 1% tolerance for rounding differences
-    """
+    """Validate cart amount against requested total using cart service."""
     user_cart = await cart_collection.find_one({"user_id": user_id})
     if not user_cart or not user_cart.get("items"):
         return True, 0.0
 
-    calculated_total = 0.0
-    for item in user_cart["items"]:
-        price_str = str(item.get("price", "0"))
-        clean_price = re.sub(r"^Rs\.\s*", "", price_str).replace(",", "")
-        price_val = (
-            float(clean_price) if clean_price and clean_price[0].isdigit() else 0.0
-        )
-        qty = int(item.get("quantity", 1))
-        calculated_total += price_val * qty
-
-    # Add service fee (20%)
-    calculated_total = calculated_total * 1.2
-
-    # Allow 1% tolerance for rounding
-    tolerance = calculated_total * 0.01
-    is_valid = abs(calculated_total - expected_total) <= tolerance
-
-    return is_valid, round(calculated_total, 2)
+    # Delegate to cart service
+    return svc_validate_cart_amount(user_cart["items"], expected_total)
 
 
 async def get_payment_status(razorpay_payment_id: str) -> dict:
-    """Get actual payment status from Razorpay"""
-    try:
-        payment = razorpay_client.payment.fetch(razorpay_payment_id)
-        return {
-            "status": payment.get("status"),
-            "amount": payment.get("amount") / 100,
-            "currency": payment.get("currency"),
-            "method": payment.get("method"),
-            "created_at": payment.get("created_at"),
-            "email": payment.get("email"),
-            "contact": payment.get("contact"),
-        }
-    except Exception as e:
-        return {"error": str(e)}
+    """Get actual payment status from Razorpay using payment service."""
+    return svc_get_payment_status(razorpay_payment_id)
 
 
 def decode_token(token: str) -> dict:

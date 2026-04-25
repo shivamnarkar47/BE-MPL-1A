@@ -2,21 +2,15 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi import status as http_status
 from typing import List, Optional
 from datetime import datetime, timedelta
-from pymongo import MongoClient
 from bson import ObjectId
-import motor.motor_asyncio
 
 from models import User, AdminStats, ActivityLog, SystemMetrics
 from admin_auth import get_current_admin_user, create_access_token
 from admin_activity import log_activity, AdminActions, ResourceTypes
+from db import db
+from helpers import to_model
 
 router = APIRouter(prefix="/admin", tags=["admin"])
-
-# MongoDB connection - use same database as main app
-from motor.motor_asyncio import AsyncIOMotorClient
-
-motor_client = AsyncIOMotorClient("mongodb://localhost:27017")
-db = motor_client["repurpose-hub"]
 
 
 @router.get("/me")
@@ -44,12 +38,8 @@ async def admin_login(email: str, password: str, request: Request):
             )
 
         # In production, verify password hash
-        # Convert MongoDB _id to id for User model
-        if "_id" in user_data:
-            user_data["id"] = str(user_data["_id"])
-            del user_data["_id"]
-
-        user = User(**user_data)
+        # Convert MongoDB _id to id for User model using helper
+        user = to_model(user_data, User)
 
         # Create JWT token
         access_token = create_access_token(data={"sub": user.id})
